@@ -1,16 +1,27 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import Table from "../Common/Table"
 
 class CoinsList extends Component {
+  get getBody() {
+    return this.props.coins.map((coin, index) => {
+      console.log(coin)
+      return [
+        <img
+          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
+          width={24}
+        />,
+        coin.name,
+        coin.value,
+      ]
+    })
+  }
+
+  componentDidMount = () => console.log(this.getBody)
   render() {
     return (
       <>
-        {this.props.coins.map((coin, index) => (
-          <div key={`coin-${coin.name}-${index}`}>
-            <span>{coin.name}</span>
-            <span>{coin.value}</span>
-          </div>
-        ))}
+        <Table header={["Icon", "Name", "Value"]} body={this.getBody}></Table>
       </>
     )
   }

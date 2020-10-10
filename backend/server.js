@@ -3,9 +3,14 @@ const dotenv = require("dotenv")
 const express = require("express")
 const cors = require("cors")
 
+// Load env vars
+dotenv.config()
+
 const app = express()
 
 const PORT = process.env.PORT || 5000
+
+const routes = require("./routes")
 
 // Enable CORS
 app.use(cors())
@@ -13,6 +18,8 @@ app.use(cors())
 app.get("/", (req, res) => {
   res.send("Hello World!")
 })
+
+app.use("/api/v1", routes)
 
 app.listen(
   PORT,

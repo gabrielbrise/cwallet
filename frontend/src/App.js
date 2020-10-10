@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import "./App.css"
-import Section from "./components/Common/Section"
-import AddCoin from "./components/Wallet/AddCoin"
+import Section from "components/Common/Section"
+import AddCoin from "components/Wallet/AddCoin"
 import { createStore } from "redux"
 import { Provider } from "react-redux"
-import CoinsList from "./components/Wallet/CoinsList"
-import { walletReducer } from "./ducks/Wallet"
+import CoinsList from "components/Wallet/CoinsList"
+import { walletReducer } from "ducks/Wallet"
 
 function reducer(state = {}, action) {
   return {

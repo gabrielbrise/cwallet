@@ -1,11 +1,13 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { addCoin } from "../../ducks/Wallet"
+import CoinSymbolInput from "components/Wallet/CoinSymbolInput"
 
 class AddCoin extends Component {
   addCoin = (e) => {
     const coin = {
-      name: e.target.name.value,
+      id: JSON.parse(e.target.coin.value).id,
+      name: JSON.parse(e.target.coin.value).name,
       value: e.target.value.value,
     }
     console.log(coin)
@@ -15,13 +17,8 @@ class AddCoin extends Component {
   }
   render() {
     return (
-      <form className="form-inline" onSubmit={this.addCoin}>
-        <input
-          className="form-control mr-2"
-          name="name"
-          type="text"
-          placeholder="NAME"
-        ></input>
+      <form className="form-inline mt-4" onSubmit={this.addCoin}>
+        <CoinSymbolInput />
         <input
           className="form-control mr-2"
           name="value"
