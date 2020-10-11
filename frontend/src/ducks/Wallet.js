@@ -30,12 +30,18 @@ export function walletReducer(state = initialState, action) {
 // Action Creators
 
 export function addCoin({ id, name, value }) {
-  return {
-    type: types.ADD_COIN,
-    payload: {
-      id,
-      name,
-      value,
-    },
-  }
+  fetch(`http://localhost:5000/api/v1/btc/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        type: types.ADD_COIN,
+        payload: {
+          id,
+          name,
+          value,
+          btc_price: data.btc_price,
+        },
+      }
+    })
+    .catch(console.error)
 }

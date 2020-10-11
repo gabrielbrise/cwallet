@@ -13,8 +13,6 @@ exports.btcCurrentValue = async (req, res, err) => {
 
   const response = await Promise.all([p1, p2])
 
-  console.log(response)
-
   const BTC_VALUE = {
     BTC_USD: p1.data.data.BTC.quote.USD.price,
     BTC_BRL: p2.data.data.BTC.quote.BRL.price,
@@ -23,7 +21,16 @@ exports.btcCurrentValue = async (req, res, err) => {
   myCache.set("BTC_VALUE", BTC_VALUE)
 
   return res.status(200).json(BTC_VALUE)
-  // return res.status(500).send("deu ruim");
+}
+
+exports.coinBtcCurrentValue = async (req, res, err) => {
+  const response = await fetchLatestCoinBTCValue(req.params.id)
+
+  const COIN_BTC_VALUE = {
+    btc_price: response.data.data["1"].quote["BTC"].price,
+  }
+
+  return res.status(200).json(COIN_BTC_VALUE)
 }
 
 exports.currentCoinsList = async (req, res, err) => {
@@ -32,7 +39,6 @@ exports.currentCoinsList = async (req, res, err) => {
   if (getCache) return getCache
 
   const response = await fetchCoinsList()
-  console.log(response)
 
   const COINS_LIST = {
     list: response.data.data
@@ -73,6 +79,21 @@ const fetchLatestBTC_BRL = () =>
       params: {
         symbol: "BTC",
         convert: "BRL",
+      },
+      headers: {
+        Accept: "application/json",
+        "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
+      },
+    }
+  )
+
+const fetchLatestCoinBTCValue = (coinId) =>
+  axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
+    {
+      params: {
+        id: coinId,
+        convert: "BTC",
       },
       headers: {
         Accept: "application/json",

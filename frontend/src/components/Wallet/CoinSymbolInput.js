@@ -12,7 +12,7 @@ const CoinSymbolInput = () => {
   return (
     <select className="form-control mr-2" name="coin">
       {list.map((coin, index) => (
-        <option value={JSON.stringify(coin)} key={`coin-${coin.id}`}>
+        <option value={JSON.stringify(coin)} key={`coin-${coin.id}-${index}`}>
           {coin.symbol} - {coin.name}
         </option>
       ))}

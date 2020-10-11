@@ -1,41 +1,38 @@
 // store/ducks/auth.js
 
-// Action Types
+// Types
 
 export const types = {
-  ADD_COIN: "wallet/ADD_COIN",
-  REMOVE_COIN: "wallet/REMOVE_COIN",
-  UPDATE_COIN: "wallet/UPDATE_COIN",
+  UPDATE_BTC: "market/UPDATE_BTC",
 }
 
 // Reducer
 
-const initialState = [
-  {
-    name: "BTC",
-    value: 1.2321,
-    id: 1,
+const initialState = {
+  btc: {
+    BTC_USD: 0,
+    BTC_BRL: 0,
   },
-]
+}
 
-export function walletReducer(state = initialState, action) {
+export function marketReducer(state = initialState, action) {
+  console.log(state, action)
   switch (action.type) {
-    case types.ADD_COIN:
-      return [...state, action.payload]
+    case types.UPDATE_BTC:
+      return { btc: action.payload }
     default:
       return state
   }
 }
 
-// Action Creators
+// Action
 
-export function addCoin({ id, name, value }) {
+export function updateBTCValue({ BTC_USD, BTC_BRL }) {
   return {
-    type: types.ADD_COIN,
+    type: types.UPDATE_BTC,
     payload: {
-      id,
-      name,
-      value,
+      BTC_USD,
+      BTC_BRL,
     },
   }
 }

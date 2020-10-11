@@ -10,7 +10,6 @@ class AddCoin extends Component {
       name: JSON.parse(e.target.coin.value).name,
       value: e.target.value.value,
     }
-    console.log(coin)
 
     e.preventDefault()
     this.props.dispatch(addCoin(coin))
@@ -23,7 +22,7 @@ class AddCoin extends Component {
           className="form-control mr-2"
           name="value"
           type="number"
-          placeholder="VALUE"
+          placeholder="AMOUNT"
         ></input>
         <button className="btn btn-primary" type="submit">
           ADD

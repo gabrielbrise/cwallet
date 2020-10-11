@@ -5,7 +5,6 @@ import Table from "../Common/Table"
 class CoinsList extends Component {
   get getBody() {
     return this.props.coins.map((coin, index) => {
-      console.log(coin)
       return [
         <img
           src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
@@ -13,15 +12,21 @@ class CoinsList extends Component {
         />,
         coin.name,
         coin.value,
+        <span>Edit</span>,
+        <span className="Raleway text-danger" style={{ width: 50 }}>
+          X
+        </span>,
       ]
     })
   }
 
-  componentDidMount = () => console.log(this.getBody)
   render() {
     return (
       <>
-        <Table header={["Icon", "Name", "Value"]} body={this.getBody}></Table>
+        <Table
+          header={["Icon", "Name", "Amount", ""]}
+          body={this.getBody}
+        ></Table>
       </>
     )
   }
