@@ -17,26 +17,24 @@ const MarketInfo = ({ btc, dispatch }) => {
   return (
     <div className="d-flex flex-row">
       <Card>
-        <BtcIcon
-          height={24}
+        <img
+          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
           width={24}
-          fill="#888"
-          stroke="#888"
-          style={{ display: "block" }}
         />
         <div style={{ color: "#888" }}>BRL</div>
-        <div className="OpenSans">R${btc.BTC_BRL.toFixed(2)}</div>
+        <div className="OpenSans font-weight-bold">
+          R$ {btc.BTC_BRL.toFixed(2)}
+        </div>
       </Card>
       <Card>
-        <BtcIcon
-          height={24}
+        <img
+          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
           width={24}
-          fill="#888"
-          stroke="#888"
-          style={{ display: "block" }}
         />
         <div style={{ color: "#888" }}>USD</div>
-        <div className="OpenSans">${btc.BTC_USD.toFixed(2)}</div>
+        <div className="OpenSans font-weight-bold">
+          ${btc.BTC_USD.toFixed(2)}
+        </div>
       </Card>
     </div>
   )
