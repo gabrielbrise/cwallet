@@ -12,6 +12,12 @@
           "controllers": "backend/controllers"
         }
       }
+    ],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
     ]
   ]
 }
