@@ -4,9 +4,16 @@ const CoinSymbolInput = () => {
   const [list, setList] = useState([])
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/coins-list")
-      .then((res) => res.json())
-      .then((data) => setList(data.list))
+    const localList = localStorage.getItem("coins-list")
+    if (localList) setList(JSON.parse(localList))
+    if (!localList) {
+      fetch("http://localhost:5000/api/v1/coins-list")
+        .then((res) => res.json())
+        .then((data) => {
+          setList(data.list)
+          localStorage.setItem("coins-list", JSON.stringify(data.list))
+        })
+    }
   }, [])
 
   return (

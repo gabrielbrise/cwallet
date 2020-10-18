@@ -2,10 +2,10 @@ import React, { Component } from "react"
 import "./App.css"
 import Section from "components/Common/Section"
 import AddCoin from "components/Wallet/AddCoin"
-import { createStore } from "redux"
+import { createStore, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
 import CoinsList from "components/Wallet/CoinsList"
-import { walletReducer } from "ducks/Wallet"
+import { walletReducer, addCoinBTCValue } from "ducks/Wallet"
 import { marketReducer } from "./ducks/Market"
 import MarketInfo from "components/Market/MarketInfo"
 import { Helmet } from "react-helmet"
@@ -17,7 +17,7 @@ function reducer(state = {}, action) {
   }
 }
 
-const store = createStore(reducer)
+const store = createStore(reducer, applyMiddleware(addCoinBTCValue))
 
 class App extends Component {
   render() {

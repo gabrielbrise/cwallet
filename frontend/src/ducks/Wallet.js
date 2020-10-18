@@ -10,18 +10,22 @@ export const types = {
 
 // Reducer
 
-const initialState = [
-  {
-    name: "BTC",
-    value: 1.2321,
-    id: 1,
-  },
-]
+const localStorageInitialState = localStorage.getItem("coins")
+
+const initialState = localStorageInitialState
+  ? JSON.parse(localStorageInitialState)
+  : []
 
 export function walletReducer(state = initialState, action) {
   switch (action.type) {
     case types.ADD_COIN:
       return [...state, action.payload]
+    case types.REMOVE_COIN:
+      const removedCoinState = state.filter(
+        (_, index) => index !== action.payload.index
+      )
+      console.log(removedCoinState)
+      return [...removedCoinState]
     default:
       return state
   }
@@ -29,19 +33,49 @@ export function walletReducer(state = initialState, action) {
 
 // Action Creators
 
-export function addCoin({ id, name, value }) {
-  fetch(`http://localhost:5000/api/v1/btc/${id}`)
-    .then((res) => res.json())
-    .then((data) => {
-      return {
-        type: types.ADD_COIN,
-        payload: {
-          id,
-          name,
-          value,
-          btc_price: data.btc_price,
-        },
-      }
-    })
-    .catch(console.error)
+export function addCoin({ id, name, amount }) {
+  return {
+    type: types.ADD_COIN,
+    payload: {
+      id,
+      name,
+      amount,
+    },
+  }
+}
+
+export function removeCoin(index) {
+  return {
+    type: types.REMOVE_COIN,
+    payload: {
+      index,
+    },
+  }
+}
+
+// Middleware
+
+export const addCoinBTCValue = (store) => (next) => (action) => {
+  if (action.type === types.ADD_COIN) {
+    return fetch(`http://localhost:5000/api/v1/coin/${action.payload.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const btcValue = data.btc_price
+        const totalBTC = btcValue * action.payload.amount
+        const resultWithBTCValue = {
+          type: action.type,
+          payload: {
+            ...action.payload,
+            btcValue,
+            totalBTC,
+          },
+        }
+        let result = next(resultWithBTCValue)
+        return result
+      })
+      .catch(console.error)
+  }
+
+  let result = next(action)
+  return result
 }
