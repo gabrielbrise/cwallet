@@ -6,7 +6,7 @@ const myCache = new NodeCache({ stdTTL: 120 })
 exports.btcCurrentValue = async (req, res, err) => {
   const getCache = myCache.get("BTC_VALUE")
 
-  if (getCache) return getCache
+  if (getCache) return res.status(200).json(getCache)
 
   const p1 = await fetchLatestBTC_USD()
   const p2 = await fetchLatestBTC_BRL()
@@ -24,11 +24,14 @@ exports.btcCurrentValue = async (req, res, err) => {
 }
 
 exports.coinBtcCurrentValue = async (req, res, err) => {
+  const getCache = myCache.get(`${req.params.id}_BTC_VALUE`)
+  if (getCache) return res.status(200).json(getCache)
   const response = await fetchLatestCoinBTCValue(req.params.id)
 
   const COIN_BTC_VALUE = {
-    btc_price: response.data.data["1"].quote["BTC"].price,
+    btc_price: response.data.data[req.params.id].quote["BTC"].price,
   }
+  myCache.set(`${req.params.id}_BTC_VALUE`, COIN_BTC_VALUE)
 
   return res.status(200).json(COIN_BTC_VALUE)
 }
@@ -36,7 +39,7 @@ exports.coinBtcCurrentValue = async (req, res, err) => {
 exports.currentCoinsList = async (req, res, err) => {
   const getCache = myCache.get("COINS_LIST")
 
-  if (getCache) return getCache
+  if (getCache) return res.status(200).json(getCache)
 
   const response = await fetchCoinsList()
 
