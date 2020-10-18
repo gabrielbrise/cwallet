@@ -21,6 +21,7 @@ module.exports = {
                 alias: {
                   "components*": "./components/*",
                   "ducks*": "./ducks/*",
+                  "helpers*": "./helpers/*",
                 },
               },
             ],
