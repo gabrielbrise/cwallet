@@ -14,7 +14,9 @@ const PORT = process.env.PORT || 3000
 // Enable CORS
 app.use(cors())
 
-app.get("/", app.get("/", express.static(path.join(__dirname, "public"))))
+app.get("/", express.static(path.join(__dirname, "public")))
+app.use("/dist", express.static(path.join(__dirname, "dist")))
+
 app.listen(
   PORT,
   console.log(
