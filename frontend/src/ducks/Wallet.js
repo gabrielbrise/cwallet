@@ -1,4 +1,4 @@
-// store/ducks/auth.js
+import { API_BASE_URL } from "../helpers/URL"
 
 // Action Types
 
@@ -57,7 +57,7 @@ export function removeCoin(index) {
 
 export const addCoinBTCValue = (store) => (next) => (action) => {
   if (action.type === types.ADD_COIN) {
-    return fetch(`http://localhost:5000/api/v1/coin/${action.payload.id}`)
+    return fetch(`${API_BASE_URL}/api/v1/coin/${action.payload.id}`)
       .then((res) => res.json())
       .then((data) => {
         const btcValue = data.btc_price

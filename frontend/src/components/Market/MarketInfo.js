@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { updateBTCValue } from "ducks/Market"
-import BtcIcon from "../../../public/assets/btc.svg"
+import { API_BASE_URL } from "helpers/URL"
 
 const MarketInfo = ({ btc, dispatch }) => {
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/btc")
+    fetch(`${API_BASE_URL}/api/v1/btc`)
       .then((res) => res.json())
       .then((data) => {
         console.log("ewwefwef", data)

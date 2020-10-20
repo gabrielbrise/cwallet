@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { API_BASE_URL } from "helpers/URL"
 
 const CoinSymbolInput = () => {
   const [list, setList] = useState([])
@@ -7,7 +8,7 @@ const CoinSymbolInput = () => {
     const localList = localStorage.getItem("coins-list")
     if (localList) setList(JSON.parse(localList))
     if (!localList) {
-      fetch("http://localhost:5000/api/v1/coins-list")
+      fetch(`${API_BASE_URL}/api/v1/coins-list`)
         .then((res) => res.json())
         .then((data) => {
           setList(data.list)
