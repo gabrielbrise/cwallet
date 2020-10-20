@@ -15,9 +15,7 @@ const routes = require("./routes")
 // Enable CORS
 app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("Hello World!")
-})
+app.get("/", express.static(path.join(__dirname, "public")))
 
 app.use("/api/v1", routes)
 
