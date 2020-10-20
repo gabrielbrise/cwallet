@@ -6,11 +6,10 @@
   "license": "MIT",
   "scripts": {
     "front-dev": "webpack-dev-server --mode development",
-    "front": "NODE_ENV=production node ./frontend/server",
     "back": "NODE_ENV=production node ./backend/server",
     "back-dev": "nodemon ./backend/server",
     "dev": "concurrently --kill-others-on-fail \"npm run front-dev\" \"npm run back-dev\"",
-    "start": "NODE_ENV=production concurrently --kill-others-on-fail \"npm run front\" \"npm run back\"",
+    "start": "npm run back",
     "build": "webpack --config webpack.config.js --mode production"
   },
   "proxy": "http://localhost:4000",
