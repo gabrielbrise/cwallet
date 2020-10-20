@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "front-dev": "webpack-dev-server --mode development",
-    "front": "webpack-dev-server --open --config webpack.config.js",
+    "front": "NODE_ENV=production node ./frontend/server",
     "back": "NODE_ENV=production node ./backend/server",
     "back-dev": "nodemon ./backend/server",
     "dev": "concurrently --kill-others-on-fail \"npm run front-dev\" \"npm run back-dev\"",
