@@ -2,6 +2,7 @@ const colors = require("colors")
 const dotenv = require("dotenv")
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
 
 // Load env vars
 dotenv.config()
@@ -13,9 +14,7 @@ const PORT = process.env.PORT || 3000
 // Enable CORS
 app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("./public/index.html")
-})
+app.get("/", app.get("/", express.static(path.join(__dirname, "public"))))
 app.listen(
   PORT,
   console.log(
