@@ -15,10 +15,6 @@ const routes = require("./routes")
 // Enable CORS
 app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("Hello World!")
-})
-
 app.use("/api/v1", routes)
 app.get("/", express.static("frontend/public"))
 app.use("/dist", express.static("frontend/dist"))
