@@ -6,9 +6,12 @@
   "license": "MIT",
   "scripts": {
     "front-dev": "webpack-dev-server --mode development",
-    "back-start": "NODE_ENV=production node ./backend/server",
+    "front": "webpack-dev-server --open --config webpack.config.js",
+    "back": "NODE_ENV=production node ./backend/server",
     "back-dev": "nodemon ./backend/server",
-    "dev": "concurrently --kill-others-on-fail \"npm run front-dev\" \"npm run back-dev\""
+    "dev": "concurrently --kill-others-on-fail \"npm run front-dev\" \"npm run back-dev\"",
+    "start": "NODE_ENV=production concurrently --kill-others-on-fail \"npm run front\" \"npm run back\"",
+    "build": "webpack --config webpack.config.js --mode production"
   },
   "proxy": "http://localhost:4000",
   "devDependencies": {
@@ -24,8 +27,7 @@
     "nodemon": "^2.0.4",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -41,6 +43,7 @@
     "react-helmet": "^6.1.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }
