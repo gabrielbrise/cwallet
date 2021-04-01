@@ -1,45 +1,57 @@
 import React, { Component } from "react"
 import "./App.css"
 import Section from "components/Common/Section"
-import AddCoin from "components/Wallet/AddCoin"
+import AddCoin from "components/Wallets/AddCoin"
 import { createStore, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
-import CoinsList from "components/Wallet/CoinsList"
-import { walletReducer, addCoinBTCValue } from "ducks/Wallet"
+import CoinsList from "components/Wallets/CoinsList"
+import { walletReducer, addCoinBTCValue } from "ducks/Wallets"
+import { btcReducer } from "ducks/Btc"
+import createSagaMiddleware from "redux-saga"
 import { marketReducer } from "./ducks/Market"
 import MarketInfo from "components/Market/MarketInfo"
 import { Helmet } from "react-helmet"
+import Header from "./components/Header"
+import rootSaga from "./sagas/Root"
+import WalletsSection from "./components/Sections/WalletsSection"
+import BitcoinSection from "components/Sections/BitcoinSection"
+import MarketSection from "components/Sections/MarketSection"
 
 function reducer(state = {}, action) {
+  console.log("ksdfkdjfkd", action)
   return {
-    coins: walletReducer(state.coins, action),
+    btc: btcReducer(state.btc, action),
+    wallets: walletReducer(state.wallets, action),
     market: marketReducer(state.market, action),
   }
 }
 
-const store = createStore(reducer, applyMiddleware(addCoinBTCValue))
+const sagaMiddleware = createSagaMiddleware()
+
+const store = createStore(reducer, applyMiddleware(sagaMiddleware))
+sagaMiddleware.run(rootSaga)
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
+        <Header />
         <div className="App">
           <div className="container">
-            <h1 className="my-4 OpenSans"> Personal Wallet </h1>
             <Helmet>
               <link
                 href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Raleway:wght@400;700&display=swap"
                 rel="stylesheet"
               />
+              <link
+                href="https://fonts.googleapis.com/icon?family=Material+Icons"
+                rel="stylesheet"
+              />
               <link href="/index.css" rel="stylesheet" />
             </Helmet>
-            <Section title="Current Market">
-              <MarketInfo />
-            </Section>
-            <Section title="Your Wallet">
-              <CoinsList />
-              <AddCoin />
-            </Section>
+            <BitcoinSection />
+            <MarketSection />
+            <WalletsSection />
           </div>
         </div>
       </Provider>

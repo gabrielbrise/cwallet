@@ -1,41 +1,44 @@
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
-import { updateBTCValue } from "ducks/Market"
-import { API_BASE_URL } from "helpers/URL"
+import { updateBTC } from "ducks/Btc"
 
-const MarketInfo = ({ btc, dispatch }) => {
+const MarketInfo = ({ btc, coins, updateBTC }) => {
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/btc`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("ewwefwef", data)
-        return dispatch(updateBTCValue(data))
-      })
-      .catch(console.error)
+    updateBTC("BRL")
   }, [])
+
+  useEffect(() => {
+    console.log("market/coins", coins)
+  }, [JSON.stringify(coins)])
+
+  const fiatCurrencySign = {
+    USD: "$",
+    BRL: "R$",
+  }
 
   return (
     <div className="d-flex flex-row">
-      <Card>
-        <img
-          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
-          width={24}
-        />
-        <div style={{ color: "#888" }}>BRL</div>
-        <div className="OpenSans font-weight-bold">
-          R$ {btc.BTC_BRL.toFixed(2)}
-        </div>
-      </Card>
-      <Card>
-        <img
-          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
-          width={24}
-        />
-        <div style={{ color: "#888" }}>USD</div>
-        <div className="OpenSans font-weight-bold">
-          ${btc.BTC_USD.toFixed(2)}
-        </div>
-      </Card>
+      {btc.value && (
+        <Card>
+          <img
+            src={`https://s2.coinmarketcap.com/static/img/coins/64x64/1.png`}
+            width={24}
+          />
+          <div style={{ color: "#888" }}>{btc.fiatCurrency}</div>
+          <div className="OpenSans font-weight-bold">
+            {`${fiatCurrencySign[btc.fiatCurrency]} ${btc.value.toFixed(2)}`}
+          </div>
+        </Card>
+      )}
+      {coins.map((coin) => (
+        <Card>
+          <img
+            src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
+            width={24}
+          />
+          <div className="OpenSans font-weight-bold">{`${coin.value}`}</div>
+        </Card>
+      ))}
     </div>
   )
 }
@@ -46,6 +49,13 @@ const Card = ({ children }) => (
   </div>
 )
 
-export default connect((store) => ({
-  btc: store.market.btc,
-}))(MarketInfo)
+const mapStateToProps = (state) => ({
+  btc: state.btc,
+  coins: state.market.coins,
+})
+
+const mapDispatchToProps = {
+  updateBTC,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MarketInfo)

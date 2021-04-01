@@ -1,8 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { addCoin } from "../../ducks/Wallet"
-import CoinSymbolInput from "components/Wallet/CoinSymbolInput"
-import { setLocalStorageWallet } from "helpers/LocalStorage"
+import CoinSymbolInput from "components/Wallets/CoinSymbolInput"
+import { addCoin } from "ducks/Wallets"
 
 class AddCoin extends Component {
   addCoin = (e) => {
@@ -10,12 +9,11 @@ class AddCoin extends Component {
       id: JSON.parse(e.target.coin.value).id,
       name: JSON.parse(e.target.coin.value).name,
       amount: e.target.amount.value,
+      walletId: this.props.walletId,
     }
 
     e.preventDefault()
-    this.props
-      .dispatch(addCoin(coin))
-      .then(() => setLocalStorageWallet(this.props.coins))
+    this.props.addCoin(coin)
   }
   render() {
     return (
@@ -37,4 +35,10 @@ class AddCoin extends Component {
   }
 }
 
-export default connect((store) => ({ coins: store.coins }))(AddCoin)
+const mapStateToProps = (state) => ({ wallets: state.wallets })
+
+const mapDispatchToProps = {
+  addCoin,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCoin)

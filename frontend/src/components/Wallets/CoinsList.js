@@ -1,15 +1,18 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import Table from "../Common/Table"
-import { removeCoin } from "ducks/Wallet"
+import { removeCoin } from "ducks/Wallets"
 import { setLocalStorageWallet } from "helpers/LocalStorage"
 
 class CoinsList extends Component {
   get getBody() {
     return [
       ...this.props.coins.map((coin, index) => {
-        const totalUSD = coin.totalBTC * this.props.BTC_USD
-        const totalBRL = coin.totalBTC * this.props.BTC_BRL
+        const currentCoin = this.props.market.coins.find(
+          (c) => c.id === coin.id
+        )
+        const totalBTC = currentCoin ? coin.amount * currentCoin.value : 0
+        const totalFiatCurrency = totalBTC * this.props.btc.value
         return [
           <img
             src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
@@ -17,10 +20,8 @@ class CoinsList extends Component {
           />,
           coin.name,
           coin.amount,
-          coin.btcValue.toFixed(8),
-          coin.totalBTC.toFixed(8),
-          totalUSD.toFixed(2),
-          totalBRL.toFixed(2),
+          totalBTC.toFixed(8),
+          totalFiatCurrency.toFixed(2),
           <span>Edit</span>,
           <span
             className="Raleway text-danger"
@@ -36,13 +37,10 @@ class CoinsList extends Component {
         "",
         "",
         "",
-        <b>{this.calculateTotal("totalBTC").toFixed(8)} BTC</b>,
-        <b>
-          ${(this.calculateTotal("totalBTC") * this.props.BTC_USD).toFixed(2)}
-        </b>,
-        <b>
-          R$ {(this.calculateTotal("totalBTC") * this.props.BTC_BRL).toFixed(2)}
-        </b>,
+        // <b>{this.calculateTotal("totalBTC").toFixed(8)} BTC</b>,
+        // <b>
+        //   R$ {(this.calculateTotal("totalBTC") * this.props.BTC_BRL).toFixed(2)}
+        // </b>,
         "",
         "",
       ],
@@ -65,10 +63,8 @@ class CoinsList extends Component {
             "Icon",
             "Name",
             "Amount",
-            "BTC",
             "Total BTC",
-            "Total USD",
-            "Total BRL",
+            `Total ${this.props.btc.fiatCurrency}`,
           ]}
           body={this.getBody}
         ></Table>
@@ -77,8 +73,8 @@ class CoinsList extends Component {
   }
 }
 
-export default connect((store) => ({
-  coins: store.coins,
-  BTC_USD: store.market.btc.BTC_USD,
-  BTC_BRL: store.market.btc.BTC_BRL,
-}))(CoinsList)
+const mapStateToProps = (state) => ({ btc: state.btc, market: state.market })
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CoinsList)

@@ -3,23 +3,23 @@
 // Types
 
 export const types = {
-  UPDATE_BTC: "market/UPDATE_BTC",
+  UPDATE_COINS: "market/UPDATE_COINS",
+  UPDATE_COINS_START: "market/UPDATE_COINS_START",
+  ADD_COIN: "market/ADD_COIN",
 }
 
 // Reducer
 
 const initialState = {
-  btc: {
-    BTC_USD: 0,
-    BTC_BRL: 0,
-  },
+  coins: [],
 }
 
 export function marketReducer(state = initialState, action) {
-  console.log(state, action)
   switch (action.type) {
-    case types.UPDATE_BTC:
-      return { btc: action.payload }
+    case types.UPDATE_COINS:
+      return { coins: [...action.coins] }
+    case types.ADD_COIN:
+      return { coins: [...state.coins, action.coin] }
     default:
       return state
   }
@@ -27,12 +27,8 @@ export function marketReducer(state = initialState, action) {
 
 // Action
 
-export function updateBTCValue({ BTC_USD, BTC_BRL }) {
+export function updateMarket() {
   return {
-    type: types.UPDATE_BTC,
-    payload: {
-      BTC_USD,
-      BTC_BRL,
-    },
+    type: types.UPDATE_COINS_START,
   }
 }

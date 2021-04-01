@@ -7,7 +7,7 @@ const {
 
 const router = express.Router()
 
-router.route("/btc").get(btcCurrentValue)
+router.route("/btc/:fiatCurrency").get(btcCurrentValue)
 router.route("/coins-list").get(currentCoinsList)
 router.route("/coin/:id").get(coinBtcCurrentValue)
 
