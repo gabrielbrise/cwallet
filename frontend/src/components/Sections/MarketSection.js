@@ -4,13 +4,9 @@ import { updateBTC } from "ducks/Btc"
 import Section from "components/Common/Section"
 
 const MarketSection = ({ btc, coins }) => {
-  useEffect(() => {
-    console.log("market/coins", coins)
-  }, [JSON.stringify(coins)])
-
   return (
     <Section title="Current Market">
-      {coins.length === 0 ? (
+      {coins.length === 0 || (coins.length === 1 && coins[0].id === 1) ? (
         "Add altcoins to your wallets to see market information about them"
       ) : (
         <MarketInfo btc={btc} coins={coins} />
@@ -28,6 +24,7 @@ const MarketInfo = ({ btc, coins }) => {
   return (
     <div className="d-flex flex-row">
       {coins.map((coin) => {
+        if (coin.id === 1) return null
         const fiatCurrentValue = (coin.value * btc.value).toFixed(2)
         return (
           <Card>

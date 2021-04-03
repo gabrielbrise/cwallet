@@ -30,8 +30,8 @@ const MarketInfo = ({ btc, coins, updateBTC }) => {
           </div>
         </Card>
       )}
-      {coins.map((coin) => (
-        <Card>
+      {coins.map((coin, index) => (
+        <Card key={`${coin.id}-${index}`}>
           <img
             src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
             width={24}

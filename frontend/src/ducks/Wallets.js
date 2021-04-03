@@ -1,7 +1,14 @@
 import { API_BASE_URL } from "../helpers/URL"
 import { v4 as uuidv4 } from "uuid"
 import { types as MARKET_TYPES } from "./Market"
-import { all, call, put, select, takeEvery } from "redux-saga/effects"
+import {
+  all,
+  call,
+  put,
+  select,
+  takeEvery,
+  takeLatest,
+} from "redux-saga/effects"
 
 // Action Types
 
@@ -10,6 +17,7 @@ export const types = {
   REMOVE_COIN: "wallets/REMOVE_COIN",
   UPDATE_COIN: "wallets/UPDATE_COIN",
   ADD_WALLET: "wallets/ADD_WALLET",
+  CALCULATE_WALLET_BTC_VALUE: "wallets/CALCULATE_WALLET_BTC_VALUE",
 }
 
 // Reducer
@@ -23,6 +31,7 @@ const initialState = localStorageInitialState
         name: "My first crypto wallet",
         id: "2098hwdw8hf",
         coins: [],
+        totalBtcValue: 0,
       },
     ]
 
@@ -48,10 +57,22 @@ export function walletReducer(state = initialState, action) {
       const removedCoinState = state.filter(
         (_, index) => index !== action.payload.index
       )
-      console.log(removedCoinState)
       return [...removedCoinState]
     case types.ADD_WALLET:
       return [...state, { name: action.payload.name, id: uuidv4(), coins: [] }]
+    case types.CALCULATE_WALLET_BTC_VALUE:
+      const walletIndex = state.findIndex(
+        (wallet) => wallet.id === action.wallet.id
+      )
+      if (state.length === 1)
+        return [
+          { ...state[walletIndex], totalBtcValue: action.wallet.totalBtcValue },
+        ]
+      return [
+        ...state.slice(0, walletIndex),
+        { ...state[walletIndex], totalBtcValue: action.wallet.totalBtcValue },
+        ...state.slice(walletIndex + 1),
+      ]
     default:
       return state
   }
@@ -124,13 +145,11 @@ function* watchWallets() {
 
 function* checkForNewCoins(action) {
   const currentCoins = yield select(getCurrentMarketCoins)
-  console.log("tr234f23f", currentCoins, action)
   if (
     (currentCoins.length == 0) |
     !currentCoins.some((coin) => coin.id === action.payload.id)
   ) {
     const coinCurrentValue = yield call(fetchCoinValue, action.payload.id)
-    console.log("coinCurrentValue", coinCurrentValue)
     yield put({
       type: MARKET_TYPES.ADD_COIN,
       coin: {
@@ -140,9 +159,26 @@ function* checkForNewCoins(action) {
       },
     })
   }
+  const wallets = yield select(getWallets)
+  const currentWalletCoins = wallets.find(
+    (w) => w.id === action.payload.walletId
+  )
+  const marketCoins = yield select(getCurrentMarketCoins)
+  const walletBTCValue = currentWalletCoins.coins.reduce((acc, coin) => {
+    return acc + coin.amount * marketCoins.find((c) => c.id === coin.id).value
+  }, 0)
+
+  yield put({
+    type: types.CALCULATE_WALLET_BTC_VALUE,
+    wallet: {
+      id: action.payload.walletId,
+      totalBtcValue: walletBTCValue,
+    },
+  })
 }
 
 const getWallets = (state) => state.wallets
+
 const getCurrentMarketCoins = (state) => state.market.coins
 
 function fetchCoinValue(coinId) {

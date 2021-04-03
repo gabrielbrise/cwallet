@@ -18,7 +18,6 @@ import BitcoinSection from "components/Sections/BitcoinSection"
 import MarketSection from "components/Sections/MarketSection"
 
 function reducer(state = {}, action) {
-  console.log("ksdfkdjfkd", action)
   return {
     btc: btcReducer(state.btc, action),
     wallets: walletReducer(state.wallets, action),
