@@ -10,17 +10,26 @@ export const types = {
 
 // Reducer
 
-const initialState = {
-  btc: {
-    fiatCurrency: "USD",
-    value: 25000,
-  },
-}
+const localStorageInitialState = localStorage.getItem("btc")
+const updateLocalStorage = (state) =>
+  localStorage.setItem("btc", JSON.stringify(state))
+
+const initialState = localStorageInitialState
+  ? JSON.parse(localStorageInitialState)
+  : {
+      btc: {
+        fiatCurrency: "USD",
+        value: 25000,
+      },
+    }
 
 export function btcReducer(state = initialState, action) {
   switch (action.type) {
-    case types.UPDATE_BTC:
-      return { ...state, ...action.btc }
+    case types.UPDATE_BTC: {
+      let updatedBtc = { ...state, ...action.btc }
+      updateLocalStorage(updatedBtc)
+      return updatedBtc
+    }
     default:
       return state
   }

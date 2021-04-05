@@ -10,16 +10,28 @@ export const types = {
 
 // Reducer
 
-const initialState = {
-  coins: [],
-}
+const localStorageInitialState = localStorage.getItem("market")
+const updateLocalStorage = (state) =>
+  localStorage.setItem("market", JSON.stringify(state))
+
+const initialState = localStorageInitialState
+  ? JSON.parse(localStorageInitialState)
+  : {
+      coins: [],
+    }
 
 export function marketReducer(state = initialState, action) {
   switch (action.type) {
-    case types.UPDATE_COINS:
-      return { coins: [...action.coins] }
-    case types.ADD_COIN:
-      return { coins: [...state.coins, action.coin] }
+    case types.UPDATE_COINS: {
+      let updatedMarket = { coins: [...action.coins] }
+      updateLocalStorage(updatedMarket)
+      return updatedMarket
+    }
+    case types.ADD_COIN: {
+      let updatedMarket = { coins: [...state.coins, action.coin] }
+      updateLocalStorage(updatedMarket)
+      return updatedMarket
+    }
     default:
       return state
   }

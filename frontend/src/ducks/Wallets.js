@@ -1,14 +1,7 @@
 import { API_BASE_URL } from "../helpers/URL"
 import { v4 as uuidv4 } from "uuid"
 import { types as MARKET_TYPES } from "./Market"
-import {
-  all,
-  call,
-  put,
-  select,
-  takeEvery,
-  takeLatest,
-} from "redux-saga/effects"
+import { all, call, put, select, takeEvery } from "redux-saga/effects"
 
 // Action Types
 
@@ -17,12 +10,16 @@ export const types = {
   REMOVE_COIN: "wallets/REMOVE_COIN",
   UPDATE_COIN: "wallets/UPDATE_COIN",
   ADD_WALLET: "wallets/ADD_WALLET",
+  RENAME_WALLET: "wallets/RENAME_WALLET",
   CALCULATE_WALLET_BTC_VALUE: "wallets/CALCULATE_WALLET_BTC_VALUE",
+  DELETE_WALLET: "wallets/DELETE_WALLET",
 }
 
 // Reducer
 
 const localStorageInitialState = localStorage.getItem("wallets")
+const updateLocalStorage = (state) =>
+  localStorage.setItem("wallets", JSON.stringify(state))
 
 const initialState = localStorageInitialState
   ? JSON.parse(localStorageInitialState)
@@ -37,7 +34,7 @@ const initialState = localStorageInitialState
 
 export function walletReducer(state = initialState, action) {
   switch (action.type) {
-    case types.ADD_COIN:
+    case types.ADD_COIN: {
       const unalteredWallets = state.filter(
         (wallet) => action.payload.walletId !== wallet.id
       )
@@ -49,30 +46,69 @@ export function walletReducer(state = initialState, action) {
         name: action.payload.name,
         amount: action.payload.amount,
       }
-      return [
+      let updatedWallets = [
         ...unalteredWallets,
         { ...alteredWallet, coins: [...alteredWallet.coins, newCoin] },
       ]
-    case types.REMOVE_COIN:
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
+    case types.DELETE_WALLET: {
+      const walletIndex = state.findIndex(
+        (wallet) => wallet.id === action.wallet.id
+      )
+
+      if (!walletIndex | (walletIndex < 0)) return state
+      const updatedWallets = [...state]
+      updatedWallets.splice(walletIndex, 1)
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
+    case types.RENAME_WALLET: {
+      const walletIndex = state.findIndex(
+        (wallet) => wallet.id === action.wallet.id
+      )
+      let updatedWallets = [
+        ...state.slice(0, walletIndex),
+        { ...state[walletIndex], name: action.wallet.name },
+        ...state.slice(walletIndex + 1),
+      ]
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
+    case types.REMOVE_COIN: {
       const removedCoinState = state.filter(
         (_, index) => index !== action.payload.index
       )
       return [...removedCoinState]
-    case types.ADD_WALLET:
-      return [...state, { name: action.payload.name, id: uuidv4(), coins: [] }]
-    case types.CALCULATE_WALLET_BTC_VALUE:
+    }
+    case types.ADD_WALLET: {
+      let updatedWallets = [
+        ...state,
+        { name: action.payload.name, id: uuidv4(), coins: [] },
+      ]
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
+    case types.CALCULATE_WALLET_BTC_VALUE: {
       const walletIndex = state.findIndex(
         (wallet) => wallet.id === action.wallet.id
       )
-      if (state.length === 1)
-        return [
+      if (state.length === 1) {
+        let updatedWallets = [
           { ...state[walletIndex], totalBtcValue: action.wallet.totalBtcValue },
         ]
-      return [
+        updateLocalStorage(updatedWallets)
+        return updatedWallets
+      }
+      let updatedWallets = [
         ...state.slice(0, walletIndex),
         { ...state[walletIndex], totalBtcValue: action.wallet.totalBtcValue },
         ...state.slice(walletIndex + 1),
       ]
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
     default:
       return state
   }
@@ -101,12 +137,29 @@ export function removeCoin(index) {
   }
 }
 
+export function renameWallet({ name, id }) {
+  return {
+    type: types.RENAME_WALLET,
+    wallet: {
+      name,
+      id,
+    },
+  }
+}
+
 export function addWallet({ name }) {
   return {
     type: types.ADD_WALLET,
     payload: {
       name,
     },
+  }
+}
+
+export function deleteWallet({ id }) {
+  return {
+    type: types.DELETE_WALLET,
+    wallet: { id },
   }
 }
 
@@ -159,7 +212,7 @@ function* checkForNewCoins(action) {
       },
     })
   }
-  const wallets = yield select(getWallets)
+  let wallets = yield select(getWallets)
   const currentWalletCoins = wallets.find(
     (w) => w.id === action.payload.walletId
   )

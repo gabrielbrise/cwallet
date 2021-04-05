@@ -1,7 +1,10 @@
-import React from "react"
+import styled from "styled-components"
 
-const Input = () => {
-  return <input>oioi</input>
-}
+const Input = styled.input`
+  border-radius: 4px;
+  border-color: var(--gray);
+  border-width: 1px;
+  font-family: "Open Sans", sans-serif;
+`
 
 export default Input

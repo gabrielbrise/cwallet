@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import CoinSymbolInput from "components/Wallets/CoinSymbolInput"
 import { addCoin } from "ducks/Wallets"
+import styled from "styled-components"
 
 class AddCoin extends Component {
   addCoin = (e) => {
@@ -15,9 +16,13 @@ class AddCoin extends Component {
     e.preventDefault()
     this.props.addCoin(coin)
   }
+  cancel = (e) => {
+    e.preventDefault()
+    this.props.setAddCoin(false)
+  }
   render() {
     return (
-      <form className="form-inline mt-4" onSubmit={this.addCoin}>
+      <Container className="form-inline mt-4" onSubmit={this.addCoin}>
         <CoinSymbolInput />
         <input
           className="form-control mr-2"
@@ -30,7 +35,10 @@ class AddCoin extends Component {
         <button className="btn btn-primary" type="submit">
           ADD
         </button>
-      </form>
+        <button className="btn btn-danger ml-2" onClick={this.cancel}>
+          cancel
+        </button>
+      </Container>
     )
   }
 }
@@ -42,3 +50,14 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCoin)
+
+const Container = styled.form`
+  display: flex;
+  max-width: 90vw;
+  > * {
+    max-width: 45%;
+  }
+  > :last-child {
+    max-width: 10%;
+  }
+`

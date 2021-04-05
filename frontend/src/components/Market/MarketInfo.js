@@ -7,10 +7,6 @@ const MarketInfo = ({ btc, coins, updateBTC }) => {
     updateBTC("BRL")
   }, [])
 
-  useEffect(() => {
-    console.log("market/coins", coins)
-  }, [JSON.stringify(coins)])
-
   const fiatCurrencySign = {
     USD: "$",
     BRL: "R$",

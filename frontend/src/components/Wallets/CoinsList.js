@@ -5,6 +5,10 @@ import { removeCoin } from "ducks/Wallets"
 import { setLocalStorageWallet } from "helpers/LocalStorage"
 
 class CoinsList extends Component {
+  fiatCurrencySign = {
+    USD: "$",
+    BRL: "R$",
+  }
   get getBody() {
     return [
       ...this.props.coins.map((coin, index) => {
@@ -36,11 +40,17 @@ class CoinsList extends Component {
         "",
         "",
         "",
+        this.props.totalBtcValue && (
+          <b>{this.props.totalBtcValue.toFixed(8)} BTC</b>
+        ),
+        this.props.totalBtcValue && (
+          <b>
+            {`${this.fiatCurrencySign[this.props.btc.fiatCurrency]} ${(
+              this.props.totalBtcValue * this.props.btc.value
+            ).toFixed(2)}`}
+          </b>
+        ),
         "",
-        // <b>{this.calculateTotal("totalBTC").toFixed(8)} BTC</b>,
-        // <b>
-        //   R$ {(this.calculateTotal("totalBTC") * this.props.BTC_BRL).toFixed(2)}
-        // </b>,
         "",
         "",
       ],
