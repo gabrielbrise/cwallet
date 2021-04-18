@@ -4,21 +4,16 @@ const NodeCache = require("node-cache")
 const myCache = new NodeCache({ stdTTL: 120 })
 
 exports.btcCurrentValue = async (req, res, err) => {
-  const getCache = myCache.get("BTC_VALUE")
+  const storageKey = `BTC_${req.params.fiatCurrency}_VALUE`
+  const getCache = myCache.get(storageKey)
 
   if (getCache) return res.status(200).json(getCache)
 
-  const p1 = await fetchLatestBTC_USD()
-  const p2 = await fetchLatestBTC_BRL()
+  const response = await fetchBTCByFiatCurrency(req.params.fiatCurrency)
 
-  const response = await Promise.all([p1, p2])
+  const BTC_VALUE = response.data.data.BTC.quote[req.params.fiatCurrency].price
 
-  const BTC_VALUE = {
-    BTC_USD: p1.data.data.BTC.quote.USD.price,
-    BTC_BRL: p2.data.data.BTC.quote.BRL.price,
-  }
-
-  myCache.set("BTC_VALUE", BTC_VALUE)
+  myCache.set(storageKey, BTC_VALUE)
 
   return res.status(200).json(BTC_VALUE)
 }
@@ -59,6 +54,21 @@ exports.currentCoinsList = async (req, res, err) => {
 
   return res.status(200).json(COINS_LIST)
 }
+
+const fetchBTCByFiatCurrency = (fiatCurrency) =>
+  axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
+    {
+      params: {
+        symbol: "BTC",
+        convert: fiatCurrency,
+      },
+      headers: {
+        Accept: "application/json",
+        "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
+      },
+    }
+  )
 
 const fetchLatestBTC_USD = () =>
   axios.get(
