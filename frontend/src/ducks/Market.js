@@ -1,25 +1,40 @@
 // store/ducks/auth.js
 
+import { call, all, select, takeEvery, put } from "@redux-saga/core/effects"
+import { fetchCoinValue } from "ducks/Wallets"
+
 // Types
 
 export const types = {
-  UPDATE_BTC: "market/UPDATE_BTC",
+  UPDATE_COINS: "market/UPDATE_COINS",
+  UPDATE_COINS_START: "market/UPDATE_COINS_START",
+  ADD_COIN: "market/ADD_COIN",
 }
 
 // Reducer
 
-const initialState = {
-  btc: {
-    BTC_USD: 0,
-    BTC_BRL: 0,
-  },
-}
+const localStorageInitialState = localStorage.getItem("market")
+const updateLocalStorage = (state) =>
+  localStorage.setItem("market", JSON.stringify(state))
+
+const initialState = localStorageInitialState
+  ? JSON.parse(localStorageInitialState)
+  : {
+      coins: [],
+    }
 
 export function marketReducer(state = initialState, action) {
-  console.log(state, action)
   switch (action.type) {
-    case types.UPDATE_BTC:
-      return { btc: action.payload }
+    case types.UPDATE_COINS: {
+      let updatedMarket = { coins: [...action.coins] }
+      updateLocalStorage(updatedMarket)
+      return updatedMarket
+    }
+    case types.ADD_COIN: {
+      let updatedMarket = { coins: [...state.coins, action.coin] }
+      updateLocalStorage(updatedMarket)
+      return updatedMarket
+    }
     default:
       return state
   }
@@ -27,12 +42,36 @@ export function marketReducer(state = initialState, action) {
 
 // Action
 
-export function updateBTCValue({ BTC_USD, BTC_BRL }) {
+export function updateMarket() {
   return {
-    type: types.UPDATE_BTC,
-    payload: {
-      BTC_USD,
-      BTC_BRL,
-    },
+    type: types.UPDATE_COINS_START,
   }
+}
+
+function* watchMarket() {
+  yield takeEvery(types.UPDATE_COINS_START, fetchUpdatedCoins)
+}
+
+const getCurrentMarketCoins = (state) => state.market.coins
+
+function* fetchUpdatedCoins() {
+  const coins = yield select(getCurrentMarketCoins)
+  const updatedCoins = yield call(fetchAllMarketCoins, coins)
+  yield put({ type: types.UPDATE_COINS, coins: updatedCoins })
+}
+
+async function fetchAllMarketCoins(coins) {
+  const p = await Promise.all(
+    coins.map(async (coin) =>
+      fetchCoinValue(coin.id).then(({ btc_price }) => ({
+        ...coin,
+        value: btc_price.toFixed(8),
+      }))
+    )
+  )
+  return p
+}
+
+export function* MarketSaga() {
+  yield all([watchMarket()])
 }

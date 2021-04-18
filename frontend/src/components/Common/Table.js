@@ -28,9 +28,9 @@ const Table = ({ header, body }) => {
 }
 
 const Column = ({ data }) => {
-  if (!data?.children) return <td className="FS2x PV8 PR24">{data}</td>
+  if (!data?.children) return <td className="FS2x py-1 PR24">{data}</td>
   const { className, ...props } = data
-  return <td className={classNames("FS2x PV8 PR24", className)} {...props} />
+  return <td className={classNames("FS2x py-1 PR24", className)} {...props} />
 }
 
 const Container = styled.table`
