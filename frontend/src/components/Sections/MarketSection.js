@@ -1,11 +1,11 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { updateBTC } from "ducks/Btc"
 import Section from "components/Common/Section"
+import UpdateMarketButton from "components/Market/UpdateMarketButton"
 
 const MarketSection = ({ btc, coins }) => {
   return (
-    <Section title="Current Market">
+    <Section title="Current Market" headerChildren={<UpdateMarketButton />}>
       {coins.length === 0 || (coins.length === 1 && coins[0].id === 1) ? (
         "Add altcoins to your wallets to see market information about them"
       ) : (
@@ -27,7 +27,7 @@ const MarketInfo = ({ btc, coins }) => {
         if (coin.id === 1) return null
         const fiatCurrentValue = (coin.value * btc.value).toFixed(2)
         return (
-          <Card>
+          <Card key={`market-coin-${coin.id}`}>
             <img
               src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`}
               width={24}

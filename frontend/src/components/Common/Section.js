@@ -30,6 +30,4 @@ const Section = ({
 )
 export default Section
 
-const Container = styled.section`
-  overflow-y: scroll;
-`
+const Container = styled.section``

@@ -20,9 +20,6 @@ const Wallets = ({ wallets, renameWallet, deleteWallet }) =>
   ))
 
 const Wallet = (props) => {
-  useEffect(() => {
-    console.log(props.name, props)
-  }, [])
   const [renameMode, setRenameMode] = useState(false)
   const [addCoin, setAddCoin] = useState(false)
   const states = {

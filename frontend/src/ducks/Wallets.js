@@ -234,7 +234,7 @@ const getWallets = (state) => state.wallets
 
 const getCurrentMarketCoins = (state) => state.market.coins
 
-function fetchCoinValue(coinId) {
+export function fetchCoinValue(coinId) {
   return fetch(`${API_BASE_URL}/api/v1/coin/${coinId}`)
     .then((res) => res.json())
     .catch(console.error)

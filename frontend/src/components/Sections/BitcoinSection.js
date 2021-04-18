@@ -21,7 +21,7 @@ const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
         <Section
           title="Total Value"
           cardClassName="bg-primary d-flex justify-content-center"
-          sectionClassName="flex-grow-1 mr-md-2 col-md"
+          sectionClassName="flex-grow-1 mr-md-2 col-md px-0"
           cardStyle={{ height: 120, fontSize: "3rem" }}
         >
           <div className="d-flex">
@@ -38,7 +38,7 @@ const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
         </Section>
         <Section
           title="Bitcoin Value"
-          sectionClassName="flex-grow-1 ml-md-2 col-md"
+          sectionClassName="flex-grow-1 ml-md-2 col-md px-0"
           cardClassName="d-flex justify-content-center"
           cardStyle={{
             height: 120,

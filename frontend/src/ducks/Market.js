@@ -1,5 +1,8 @@
 // store/ducks/auth.js
 
+import { call, all, select, takeEvery, put } from "@redux-saga/core/effects"
+import { fetchCoinValue } from "ducks/Wallets"
+
 // Types
 
 export const types = {
@@ -43,4 +46,32 @@ export function updateMarket() {
   return {
     type: types.UPDATE_COINS_START,
   }
+}
+
+function* watchMarket() {
+  yield takeEvery(types.UPDATE_COINS_START, fetchUpdatedCoins)
+}
+
+const getCurrentMarketCoins = (state) => state.market.coins
+
+function* fetchUpdatedCoins() {
+  const coins = yield select(getCurrentMarketCoins)
+  const updatedCoins = yield call(fetchAllMarketCoins, coins)
+  yield put({ type: types.UPDATE_COINS, coins: updatedCoins })
+}
+
+async function fetchAllMarketCoins(coins) {
+  const p = await Promise.all(
+    coins.map(async (coin) =>
+      fetchCoinValue(coin.id).then(({ btc_price }) => ({
+        ...coin,
+        value: btc_price.toFixed(8),
+      }))
+    )
+  )
+  return p
+}
+
+export function* MarketSaga() {
+  yield all([watchMarket()])
 }
