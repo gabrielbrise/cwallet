@@ -50,7 +50,7 @@ class App extends Component {
                 href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
                 rel="stylesheet"
               ></link>
-              <link href="/index.css" rel="stylesheet" />
+              <link href="/index.css" rel="stylesheet" type="text/css" />
             </Helmet>
             <BitcoinSection />
             <MarketSection />
