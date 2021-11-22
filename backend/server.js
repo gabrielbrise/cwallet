@@ -17,7 +17,8 @@ app.use(cors())
 
 app.use("/api/v1", routes)
 app.get("/", express.static("frontend/public"))
-app.use("/dist", express.static("frontend/dist"))
+app.use(express.static("frontend/public"))
+app.use(express.static("frontend/dist"))
 
 app.listen(
   PORT,

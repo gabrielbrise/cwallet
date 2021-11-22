@@ -3,7 +3,7 @@ const webpack = require("webpack")
 
 module.exports = {
   entry: "./frontend/src/index.js",
-  mode: "development",
+  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {

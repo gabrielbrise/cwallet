@@ -163,6 +163,13 @@ export function deleteWallet({ id }) {
   }
 }
 
+export function calculateWalletValue({ id }) {
+  return {
+    type: types.CALCULATE_WALLET_BTC_VALUE,
+    wallet: { id },
+  }
+}
+
 // Middleware
 
 export const addCoinBTCValue = (store) => (next) => (action) => {
