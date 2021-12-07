@@ -9,7 +9,7 @@ class AddCoin extends Component {
     const coin = {
       id: JSON.parse(e.target.coin.value).id,
       name: JSON.parse(e.target.coin.value).name,
-      amount: e.target.amount.value,
+      amount: Number(e.target.amount.value),
       walletId: this.props.walletId,
     }
 
