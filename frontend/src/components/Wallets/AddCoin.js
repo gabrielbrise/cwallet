@@ -15,6 +15,7 @@ class AddCoin extends Component {
 
     e.preventDefault()
     this.props.addCoin(coin)
+    this.props.setAddCoin(false)
   }
   cancel = (e) => {
     e.preventDefault()
