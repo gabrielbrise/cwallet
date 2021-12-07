@@ -35,7 +35,11 @@ const Wallet = (props) => {
       titleClassName={classnames({ "d-none": renameMode | addCoin })}
       headerChildren={<Header {...props} {...states} />}
     >
-      <CoinsList coins={props.coins} totalBtcValue={props.totalBtcValue} />
+      <CoinsList
+        coins={props.coins}
+        totalBtcValue={props.totalBtcValue}
+        walletId={props.id}
+      />
     </Container>
   )
 }
@@ -100,6 +104,7 @@ const Header = ({
           "d-flex": !addCoin && !renameMode,
           "d-none": addCoin | renameMode,
         })}
+        role="button"
         onClick={() => setAddCoin(true)}
       >
         <Icon name="monetization_on" className="text-primary" />

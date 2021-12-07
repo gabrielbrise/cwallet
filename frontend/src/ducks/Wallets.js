@@ -48,10 +48,7 @@ export function walletReducer(state = initialState, action) {
       return state
     }
     case types.ADD_COIN: {
-      const unalteredWallets = state.filter(
-        (wallet) => action.payload.walletId !== wallet.id
-      )
-      const alteredWallet = state.find(
+      const walletIndex = state.findIndex(
         (wallet) => action.payload.walletId === wallet.id
       )
       const newCoin = {
@@ -59,9 +56,14 @@ export function walletReducer(state = initialState, action) {
         name: action.payload.name,
         amount: action.payload.amount,
       }
+      const updatedWallet = {
+        ...state[walletIndex],
+        coins: [...state[walletIndex].coins, newCoin],
+      }
       let updatedWallets = [
-        ...unalteredWallets,
-        { ...alteredWallet, coins: [...alteredWallet.coins, newCoin] },
+        ...state.slice(0, walletIndex),
+        updatedWallet,
+        ...state.slice(walletIndex + 1),
       ]
       updateLocalStorage(updatedWallets)
       return updatedWallets
@@ -90,10 +92,24 @@ export function walletReducer(state = initialState, action) {
       return updatedWallets
     }
     case types.REMOVE_COIN: {
-      const removedCoinState = state.filter(
-        (_, index) => index !== action.payload.index
+      const walletIndex = state.findIndex(
+        (wallet) => wallet.id === action.payload.walletId
       )
-      return [...removedCoinState]
+      const removedCoinState = state[walletIndex].coins.filter(
+        (_, index) => index !== action.payload.coinIndex
+      )
+      const removedCoinWallet = {
+        ...state[walletIndex],
+        coins: removedCoinState,
+      }
+
+      let updatedWallets = [
+        ...state.slice(0, walletIndex),
+        removedCoinWallet,
+        ...state.slice(walletIndex + 1),
+      ]
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
     }
     case types.ADD_WALLET: {
       let updatedWallets = [
@@ -141,11 +157,12 @@ export function addCoin({ id, name, amount, walletId }) {
   }
 }
 
-export function removeCoin(index) {
+export function removeCoin(walletId, coinIndex) {
   return {
     type: types.REMOVE_COIN,
     payload: {
-      index,
+      coinIndex,
+      walletId,
     },
   }
 }
