@@ -6,9 +6,10 @@
   "license": "MIT",
   "scripts": {
     "front-dev": "webpack-dev-server --mode development",
-    "back": "NODE_ENV=production node ./backend/server",
+    "back": "set NODE_ENV=production && node ./backend/server",
     "back-dev": "nodemon ./backend/server",
     "dev": "concurrently --kill-others-on-fail \"npm run front-dev\" \"npm run back-dev\"",
+    "test": "jest",
     "start": "npm run back",
     "build": "webpack --config webpack.config.js --mode production"
   },
@@ -23,12 +24,14 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "css-loader": "^4.3.0",
+    "jest": "^27.4.3",
     "nodemon": "^2.0.4",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "ajv": "^6.12.6",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "colors": "^1.4.0",
