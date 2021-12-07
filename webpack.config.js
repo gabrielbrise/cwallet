@@ -3,7 +3,7 @@ const webpack = require("webpack")
 
 module.exports = {
   entry: "./frontend/src/index.js",
-  mode: process.env.NODE_ENV,
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   module: {
     rules: [
       {
@@ -41,14 +41,14 @@ module.exports = {
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
     path: path.resolve(__dirname, "./frontend/dist/"),
-    publicPath: "/dist/",
+    publicPath: "/",
     filename: "bundle.js",
   },
   devtool: "inline-source-map",
   devServer: {
     contentBase: path.join(__dirname, "./frontend/public/"),
     port: 3000,
-    publicPath: "http://localhost:3000/dist/",
+    publicPath: "/",
     hotOnly: true,
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],

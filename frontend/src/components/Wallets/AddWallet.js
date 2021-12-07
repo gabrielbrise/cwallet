@@ -1,5 +1,4 @@
-import React, { useEffect } from "react"
-import PlusSign from "./PlusSign"
+import React from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { addWallet } from "ducks/Wallets"
@@ -12,11 +11,10 @@ const AddWallet = ({ wallets, addWallet }) => {
 
   return (
     <Container
-      className="d-flex pr-4 align-items-center justify-content-end"
+      className="d-flex align-items-center justify-content-end"
       onClick={onClick}
     >
       <h2 className="d-none d-md-inline h6 pr-2 m-0">ADD WALLET</h2>
-      <Icon name="account_balance_wallet" />
       <Icon name="add" outlined />
     </Container>
   )
@@ -33,7 +31,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(AddWallet)
 const Container = styled.div`
   cursor: pointer;
   transition: color 0.2s ease;
+  color: white;
   :hover {
-    color: white;
+    color: var(--primary);
   }
 `

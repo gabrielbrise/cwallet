@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import Select from "./Common/Select"
-import AddWallet from "./Wallets/AddWallet"
+import Menu from "./Common/Menu"
 import { updateBTC } from "ducks/Btc"
 
 const Header = ({ updateBTC }) => {
@@ -28,7 +28,7 @@ const Header = ({ updateBTC }) => {
         <h1 className="d-none d-md-block h5 mb-0 text-strong text-center">
           cwallet
         </h1>
-        <AddWallet />
+        <Menu />
       </div>
     </Container>
   )
@@ -59,6 +59,15 @@ const Container = styled.header`
     > :last-child {
       justify-content: right;
       width: 45%;
+    }
+
+    @media (min-width: 768px) {
+      > :first-child {
+        margin-left: 20%;
+      }
+      > :last-child {
+        margin-right: 20%;
+      }
     }
   }
 `

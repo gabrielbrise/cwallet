@@ -2,6 +2,7 @@ import { API_BASE_URL } from "../helpers/URL"
 import { v4 as uuidv4 } from "uuid"
 import { types as MARKET_TYPES } from "./Market"
 import { all, call, put, select, takeEvery } from "redux-saga/effects"
+import { validateWallets } from "../helpers/validators"
 
 // Action Types
 
@@ -13,6 +14,7 @@ export const types = {
   RENAME_WALLET: "wallets/RENAME_WALLET",
   CALCULATE_WALLET_BTC_VALUE: "wallets/CALCULATE_WALLET_BTC_VALUE",
   DELETE_WALLET: "wallets/DELETE_WALLET",
+  LOAD_WALLETS: "wallets/LOAD_WALLETS",
 }
 
 // Reducer
@@ -34,6 +36,17 @@ const initialState = localStorageInitialState
 
 export function walletReducer(state = initialState, action) {
   switch (action.type) {
+    case types.LOAD_WALLETS: {
+      const updatedWallets = action.payload.wallets
+      console.log("updatedWallets", updatedWallets)
+      console.log("validateWallets", validateWallets)
+      console.log("validateWallets", validateWallets(updatedWallets))
+      if (validateWallets(updatedWallets)) {
+        updateLocalStorage(updatedWallets)
+        return updatedWallets
+      }
+      return state
+    }
     case types.ADD_COIN: {
       const unalteredWallets = state.filter(
         (wallet) => action.payload.walletId !== wallet.id
@@ -167,6 +180,13 @@ export function calculateWalletValue({ id }) {
   return {
     type: types.CALCULATE_WALLET_BTC_VALUE,
     wallet: { id },
+  }
+}
+
+export function loadWallets(wallets) {
+  return {
+    type: types.LOAD_WALLETS,
+    payload: { wallets },
   }
 }
 
