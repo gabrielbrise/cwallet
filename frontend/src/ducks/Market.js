@@ -52,7 +52,19 @@ function* watchMarket() {
   yield takeEvery(types.UPDATE_COINS_START, fetchUpdatedCoins)
 }
 
-const getCurrentMarketCoins = (state) => state.market.coins
+const getCurrentWalletsCoins = (state) =>
+  state.wallets.reduce((acc, wallet) => [...acc, ...wallet.coins], [])
+
+const filterRepeatedCoins = (coins) =>
+  coins.reduce((acc, coin) => {
+    console.log("acc", acc, coins)
+    const accCoinsIds = acc.map(({ id }) => id)
+    if (accCoinsIds.includes(coin.id)) return acc
+    return [...acc, coin]
+  }, [])
+
+const getCurrentMarketCoins = (state) =>
+  filterRepeatedCoins(getCurrentWalletsCoins(state))
 
 function* fetchUpdatedCoins() {
   const coins = yield select(getCurrentMarketCoins)

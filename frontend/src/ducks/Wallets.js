@@ -38,9 +38,6 @@ export function walletReducer(state = initialState, action) {
   switch (action.type) {
     case types.LOAD_WALLETS: {
       const updatedWallets = action.payload.wallets
-      console.log("updatedWallets", updatedWallets)
-      console.log("validateWallets", validateWallets)
-      console.log("validateWallets", validateWallets(updatedWallets))
       if (validateWallets(updatedWallets)) {
         updateLocalStorage(updatedWallets)
         return updatedWallets
