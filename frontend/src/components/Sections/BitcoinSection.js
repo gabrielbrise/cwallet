@@ -70,17 +70,27 @@ const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
   )
 }
 
-const getTotalWalletsValue = (wallets, btc) => {
+const getTotalWalletsValue = (wallets, btc, market) => {
   if (wallets.length === 0) return 0
   return wallets.reduce((acc, wallet) => {
-    return acc + wallet.totalBtcValue * btc.value
+    return acc + walletTotalBTCValue(wallet, market.coins) * btc.value
   }, 0)
+}
+
+const walletTotalBTCValue = (wallet, marketCoins) => {
+  let coinToBtcValue = {}
+  
+  marketCoins.forEach((coin) => {
+    coinToBtcValue[coin.id] = coin.value
+  })
+  const totalBTCValue = wallet.coins.reduce((acc, coin) => (acc + coin.amount * coinToBtcValue[coin.id]), 0)
+  return totalBTCValue
 }
 
 const mapStateToProps = (state) => ({
   btc: state.btc,
   coins: state.market.coins,
-  totalWalletsValue: getTotalWalletsValue(state.wallets, state.btc) | 0,
+  totalWalletsValue: getTotalWalletsValue(state.wallets, state.btc, state.market) | 0,
 })
 
 const mapDispatchToProps = {
