@@ -13,6 +13,18 @@ class CoinsList extends Component {
   state = {
     editCoin: -1,
   }
+
+
+  get getTotalBTCValue() {
+    let coinToBtcValue = {}
+    
+    this.props.market.coins.forEach((coin) => {
+      coinToBtcValue[coin.id] = coin.value
+    })
+    const totalBTCValue = this.props.coins.reduce((acc, coin) => (acc + coin.amount * coinToBtcValue[coin.id]), 0)
+    return totalBTCValue
+  }
+
   get getBody() {
     return [
       ...this.props.coins.map((coin, index) => {
@@ -49,13 +61,13 @@ class CoinsList extends Component {
         "",
         "",
         "",
-        this.props.totalBtcValue && (
-          <b>{this.props.totalBtcValue.toFixed(8)} BTC</b>
+        this.getTotalBTCValue && (
+          <b>{this.getTotalBTCValue.toFixed(8)} BTC</b>
         ),
-        this.props.totalBtcValue && (
+        this.getTotalBTCValue && (
           <b>
             {`${this.fiatCurrencySign[this.props.btc.fiatCurrency]} ${(
-              this.props.totalBtcValue * this.props.btc.value
+              this.getTotalBTCValue * this.props.btc.value
             ).toFixed(2)}`}
           </b>
         ),

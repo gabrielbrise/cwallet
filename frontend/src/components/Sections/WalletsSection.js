@@ -37,7 +37,6 @@ const Wallet = (props) => {
     >
       <CoinsList
         coins={props.coins}
-        totalBtcValue={props.totalBtcValue}
         walletId={props.id}
       />
     </Container>
