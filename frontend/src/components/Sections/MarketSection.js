@@ -45,7 +45,10 @@ const MarketInfo = ({ btc, coins }) => {
 }
 
 const Card = ({ children }) => (
-  <div className="p-2 mx-2 d-flex flex-column align-items-center justify-content-center">
+  <div
+    className="py-2  px-3 d-flex flex-column align-items-center justify-content-center"
+    style={{ borderRight: "1px solid #eee" }}
+  >
     {children}
   </div>
 )
