@@ -5,7 +5,11 @@ import UpdateMarketButton from "components/Market/UpdateMarketButton"
 
 const MarketSection = ({ btc, coins }) => {
   return (
-    <Section title="Current Market" headerChildren={<UpdateMarketButton />}>
+    <Section
+      title="Current Market"
+      headerChildren={<UpdateMarketButton />}
+      cardStyle={{ overflow: "scroll" }}
+    >
       {coins.length === 0 || (coins.length === 1 && coins[0].id === 1) ? (
         "Add altcoins to your wallets to see market information about them"
       ) : (

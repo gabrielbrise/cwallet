@@ -8,6 +8,11 @@ body {
   font-family: "Raleway", sans-serif;
 }
 
+.open-modal-freeze {
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+
 .bg-primary {
   background-color: var(--primary) !important;
 }
