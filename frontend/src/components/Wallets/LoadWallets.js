@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { loadWallets } from "ducks/Wallets"
 import Icon from "components/Common/Icon"
 
-const LoadWallets = ({ loadWallets }) => {
+const LoadWallets = ({ loadWallets, extended }) => {
   const uploadWalletsFile = () => {
     const upload = document.getElementById("fileUpload")
     upload.click()
@@ -14,7 +14,6 @@ const LoadWallets = ({ loadWallets }) => {
   const handleWalletsFile = (e) => {
     if (e.currentTarget.files && e.currentTarget.files.length) {
       const file = e.currentTarget.files[0]
-      console.log("oioi", file)
       const reader = new FileReader()
       reader.addEventListener(
         "load",
@@ -29,7 +28,7 @@ const LoadWallets = ({ loadWallets }) => {
   }
   return (
     <Container
-      className="d-flex align-items-center justify-content-end"
+      className="d-flex align-items-center justify-content-start"
       onClick={uploadWalletsFile}
     >
       <input
@@ -39,8 +38,8 @@ const LoadWallets = ({ loadWallets }) => {
         accept=".json"
         onChange={handleWalletsFile}
       />
-      <h2 className="d-none d-md-inline h6 pr-2 m-0">LOAD WALLETS</h2>
-      <Icon name="upload" />
+      <Icon name="upload" className="mx-1" />
+      {extended && <h2 className="h6 pr-2 m-0">LOAD WALLETS</h2>}
     </Container>
   )
 }

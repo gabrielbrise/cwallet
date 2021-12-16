@@ -1,26 +1,15 @@
-import AddWallet from "components/Wallets/AddWallet"
-import SaveWallets from "components/Wallets/SaveWallets"
-import LoadWallets from "components/Wallets/LoadWallets"
 import React, { useState } from "react"
 import styled from "styled-components"
 import Icon from "./Icon"
-import Dropdown from "./Dropdown"
+import SideDrawer from "./SideDrawer"
 
 const Menu = () => {
   const [show, setShow] = useState(false)
 
   return (
-    <Container className="Raleway">
-      <Icon
-        name={show ? "close" : "menu"}
-        onClick={() => setShow(!show)}
-        className="pr-2"
-      />
-      <Dropdown show={show} className="card">
-        <SaveWallets />
-        <LoadWallets />
-        <AddWallet />
-      </Dropdown>
+    <Container className="Raleway d-flex justify-content-center align-items-center">
+      <Icon name="menu" onClick={() => setShow(!show)} className="p-1" />
+      <SideDrawer show={show} setShow={setShow} />
     </Container>
   )
 }
@@ -29,6 +18,10 @@ export default Menu
 
 const Container = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: left;
+  flex-direction: column;
   position: relative;
+  background-color: #333;
+  align-items: flex-start;
+  color: white;
 `

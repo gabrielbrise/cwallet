@@ -3,7 +3,13 @@ import { connect } from "react-redux"
 import { updateBTC } from "ducks/Btc"
 import Section from "components/Common/Section"
 
-const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
+const BitcoinSection = ({
+  btc,
+  coins,
+  updateBTC,
+  totalWalletsValue,
+  totalWalletsBTCValue,
+}) => {
   useEffect(() => {
     updateBTC("BRL")
   }, [])
@@ -31,6 +37,9 @@ const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
                   {`${
                     fiatCurrencySign[btc.fiatCurrency]
                   } ${totalWalletsValue.toFixed(2)}`}
+                </div>
+                <div className="OpenSans text-white" style={{ fontSize: 12 }}>
+                  {totalWalletsBTCValue.toFixed(8)} BTC
                 </div>
               </div>
             )}
@@ -73,24 +82,38 @@ const BitcoinSection = ({ btc, coins, updateBTC, totalWalletsValue }) => {
 const getTotalWalletsValue = (wallets, btc, market) => {
   if (wallets.length === 0) return 0
   return wallets.reduce((acc, wallet) => {
-    return acc + walletTotalBTCValue(wallet, market.coins) * btc.value
+    return acc + getWalletTotalBTCValue(wallet, market.coins) * btc.value
   }, 0)
 }
 
-const walletTotalBTCValue = (wallet, marketCoins) => {
+const getTotalWalletsBTCValue = (wallets, btc, market) => {
+  if (wallets.length === 0) return 0
+  return wallets.reduce((acc, wallet) => {
+    return acc + getWalletTotalBTCValue(wallet, market.coins)
+  }, 0)
+}
+
+const getWalletTotalBTCValue = (wallet, marketCoins) => {
   let coinToBtcValue = {}
-  
+  if (!wallet.coins.length || !marketCoins.length) return 0
+
   marketCoins.forEach((coin) => {
     coinToBtcValue[coin.id] = coin.value
   })
-  const totalBTCValue = wallet.coins.reduce((acc, coin) => (acc + coin.amount * coinToBtcValue[coin.id]), 0)
+  const totalBTCValue = wallet.coins.reduce(
+    (acc, coin) => acc + coin.amount * coinToBtcValue[coin.id],
+    0
+  )
   return totalBTCValue
 }
 
 const mapStateToProps = (state) => ({
   btc: state.btc,
   coins: state.market.coins,
-  totalWalletsValue: getTotalWalletsValue(state.wallets, state.btc, state.market) | 0,
+  totalWalletsValue:
+    getTotalWalletsValue(state.wallets, state.btc, state.market) || 0,
+  totalWalletsBTCValue:
+    getTotalWalletsBTCValue(state.wallets, state.btc, state.market) || 0,
 })
 
 const mapDispatchToProps = {

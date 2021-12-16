@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { addWallet } from "ducks/Wallets"
 import Icon from "components/Common/Icon"
 
-const SaveWallets = ({ wallets, saveWallets }) => {
+const SaveWallets = ({ wallets, saveWallets, extended }) => {
   const handleSaveWallets = async () => {
     const blob = new Blob([JSON.stringify(wallets, null, 2)], {
       type: "application/json",
@@ -20,12 +20,11 @@ const SaveWallets = ({ wallets, saveWallets }) => {
   }
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-end"
-      onClick={() => handleSaveWallets()}
-    >
-      <h2 className="d-none d-md-inline h6 pr-2 m-0">SAVE WALLETS</h2>
-      <Icon name="save" />
+    <Container className="d-flex" onClick={() => handleSaveWallets()}>
+      <Icon name="save" className="mx-1" />
+      {extended && (
+        <h2 className="d-none d-md-inline h6 pr-2 m-0">SAVE WALLETS</h2>
+      )}
     </Container>
   )
 }

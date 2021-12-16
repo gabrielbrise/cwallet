@@ -1,73 +1,27 @@
 import React from "react"
-import { connect } from "react-redux"
 import styled from "styled-components"
-import Select from "./Common/Select"
 import Menu from "./Common/Menu"
-import { updateBTC } from "ducks/Btc"
 
-const Header = ({ updateBTC }) => {
-  const options = [
-    {
-      value: "BRL",
-      title: "Brazilian Real (R$)",
-    },
-    {
-      value: "USD",
-      title: "United States Dollar ($)",
-    },
-  ]
-
-  const onChange = (e) => updateBTC(e.target.value)
+const Header = () => {
   return (
     <Container>
-      <div className="d-flex flex-row align-items-center justify-content-between w-100 same-width-columns">
-        <div className="pl-4">
-          <h2 className="d-none d-md-inline h6 pr-2">FIAT CURRENCY</h2>
-          <Select id="fiatCurrency" options={options} onChange={onChange} />
-        </div>
-        <h1 className="d-none d-md-block h5 mb-0 text-strong text-center">
-          cwallet
-        </h1>
-        <Menu />
+      <Menu />
+      <div className="d-flex flex-row align-items-center justify-content-center w-100">
+        <h1 className="h5 mb-0 text-strong text-center">cwallet</h1>
       </div>
     </Container>
   )
 }
 
-const mapStateToProps = (state) => ({ btc: state.btc })
-
-const mapDispatchToProps = {
-  updateBTC,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default Header
 
 const Container = styled.header`
-  display: fixed;
-  min-height: 32px;
+  display: flex;
+  width: 100vw;
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  height: 32px;
   background-color: #f7931a;
-  .same-width-columns {
-    > * {
-      flex-grow: 1;
-    }
-    > :first-child {
-      width: 45%;
-    }
-    > :nth-child(2) {
-      width: 10%;
-    }
-    > :last-child {
-      justify-content: right;
-      width: 45%;
-    }
-
-    @media (min-width: 768px) {
-      > :first-child {
-        margin-left: 20%;
-      }
-      > :last-child {
-        margin-right: 20%;
-      }
-    }
-  }
 `

@@ -13,7 +13,7 @@ const MarketInfo = ({ btc, coins, updateBTC }) => {
   }
 
   return (
-    <div className="d-flex flex-row">
+    <Container className="d-flex flex-row">
       {btc.value && (
         <Card>
           <img
@@ -35,12 +35,15 @@ const MarketInfo = ({ btc, coins, updateBTC }) => {
           <div className="OpenSans font-weight-bold">{`${coin.value}`}</div>
         </Card>
       ))}
-    </div>
+    </Container>
   )
 }
 
 const Card = ({ children }) => (
-  <div className="p-2 mx-2 d-flex flex-column align-items-center justify-content-center">
+  <div
+    className="w-100 p-2 mx-2 d-flex flex-column align-items-center justify-content-center"
+    style={{ overflow: "scroll" }}
+  >
     {children}
   </div>
 )
