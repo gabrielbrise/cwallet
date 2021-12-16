@@ -30,30 +30,30 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Header />
+        <Helmet>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Raleway:wght@400;700&display=swap"
+            rel="stylesheet"
+          />
+          <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+          />
+          <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+            rel="stylesheet"
+          ></link>
+          <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"
+          />
+          <link href="index.css" rel="stylesheet" />
+        </Helmet>
         <div className="App">
-          <div className="container">
-            <Helmet>
-              <link
-                href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Raleway:wght@400;700&display=swap"
-                rel="stylesheet"
-              />
-              <link
-                href="https://fonts.googleapis.com/icon?family=Material+Icons"
-                rel="stylesheet"
-              />
-              <link
-                href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-                rel="stylesheet"
-              ></link>
-              <link
-                rel="stylesheet"
-                href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-                integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-                crossorigin="anonymous"
-              />
-              <link href="index.css" rel="stylesheet" />
-            </Helmet>
+          <div className="container" style={{ paddingTop: 32 }}>
+            <Header />
             <BitcoinSection />
             <MarketSection />
             <WalletsSection />
