@@ -10,6 +10,7 @@ export const types = {
   ADD_COIN: "wallets/ADD_COIN",
   REMOVE_COIN: "wallets/REMOVE_COIN",
   UPDATE_COIN: "wallets/UPDATE_COIN",
+  EDIT_COIN_AMOUNT: "wallets/EDIT_COIN_AMOUNT",
   ADD_WALLET: "wallets/ADD_WALLET",
   RENAME_WALLET: "wallets/RENAME_WALLET",
   CALCULATE_WALLET_BTC_VALUE: "wallets/CALCULATE_WALLET_BTC_VALUE",
@@ -108,6 +109,32 @@ export function walletReducer(state = initialState, action) {
       updateLocalStorage(updatedWallets)
       return updatedWallets
     }
+
+    case types.EDIT_COIN_AMOUNT: {
+      const walletIndex = state.findIndex(
+        (wallet) => wallet.id === action.payload.walletId
+      )
+      const editCoinAmount = state[walletIndex].coins.map((coin, index) => {
+        if (index !== action.payload.coinIndex) return coin
+        return {
+          ...coin,
+          amount: action.payload.amount,
+        }
+      })
+      const updatedCoinWallet = {
+        ...state[walletIndex],
+        coins: editCoinAmount,
+      }
+
+      let updatedWallets = [
+        ...state.slice(0, walletIndex),
+        updatedCoinWallet,
+        ...state.slice(walletIndex + 1),
+      ]
+      updateLocalStorage(updatedWallets)
+      return updatedWallets
+    }
+
     case types.ADD_WALLET: {
       let updatedWallets = [
         ...state,
@@ -150,6 +177,17 @@ export function addCoin({ id, name, amount, walletId }) {
       name,
       amount,
       walletId,
+    },
+  }
+}
+
+export function editCoinAmount(walletId, coinIndex, amount) {
+  return {
+    type: types.EDIT_COIN_AMOUNT,
+    payload: {
+      coinIndex,
+      walletId,
+      amount,
     },
   }
 }

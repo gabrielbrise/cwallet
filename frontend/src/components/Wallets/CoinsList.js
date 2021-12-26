@@ -1,8 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import Table from "../Common/Table"
-import { removeCoin } from "ducks/Wallets"
-import { setLocalStorageWallet } from "helpers/LocalStorage"
+import { removeCoin, editCoinAmount } from "ducks/Wallets"
 import EditCoin from "./EditCoin"
 
 class CoinsList extends Component {
@@ -14,14 +13,16 @@ class CoinsList extends Component {
     editCoin: -1,
   }
 
-
   get getTotalBTCValue() {
     let coinToBtcValue = {}
-    
+
     this.props.market.coins.forEach((coin) => {
       coinToBtcValue[coin.id] = coin.value
     })
-    const totalBTCValue = this.props.coins.reduce((acc, coin) => (acc + coin.amount * coinToBtcValue[coin.id]), 0)
+    const totalBTCValue = this.props.coins.reduce(
+      (acc, coin) => acc + coin.amount * coinToBtcValue[coin.id],
+      0
+    )
     return totalBTCValue
   }
 
@@ -41,7 +42,15 @@ class CoinsList extends Component {
           />,
           coin.name,
           isEditCoinCurrent ? (
-            <input defaultValue={coin.amount} />
+            <input
+              defaultValue={coin.amount}
+              style={{ height: 24 }}
+              onChange={(e) =>
+                this.setState({
+                  currentCoinAmount: parseInt(e.currentTarget.value),
+                })
+              }
+            />
           ) : (
             coin.amount
           ),
@@ -52,7 +61,13 @@ class CoinsList extends Component {
             index={index}
             edit={() => this.enterEditCoin(index)}
             cancel={() => this.cancelEditCoin()}
-            save={() => this.saveEditCoin(this.props.walletId, index)}
+            save={(e) =>
+              this.saveEditCoin(
+                this.props.walletId,
+                index,
+                this.state.currentCoinAmount
+              )
+            }
             remove={() => this.props.removeCoin(this.props.walletId, index)}
           />,
         ]
@@ -61,9 +76,7 @@ class CoinsList extends Component {
         "",
         "",
         "",
-        this.getTotalBTCValue && (
-          <b>{this.getTotalBTCValue.toFixed(8)} BTC</b>
-        ),
+        this.getTotalBTCValue && <b>{this.getTotalBTCValue.toFixed(8)} BTC</b>,
         this.getTotalBTCValue && (
           <b>
             {`${this.fiatCurrencySign[this.props.btc.fiatCurrency]} ${(
@@ -84,14 +97,12 @@ class CoinsList extends Component {
     this.setState({ editCoin: -1 })
   }
 
-  saveEditCoin = () => {
+  saveEditCoin = (walletId, index, amount) => {
+    this.props.editCoinAmount(walletId, index, amount)
     this.cancelEditCoin()
   }
 
-  removeCoin = async (index) => {
-    await this.props.dispatch(removeCoin(index))
-    return setLocalStorageWallet(this.props.coins)
-  }
+  removeCoin = (index) => this.props.removeCoin(index)
 
   calculateTotal = (value) =>
     this.props.coins.reduce((_acc, coin) => _acc + coin[value], 0)
@@ -101,11 +112,12 @@ class CoinsList extends Component {
       <>
         <Table
           header={[
-            "Icon",
-            "Name",
-            "Amount",
-            "Total BTC",
-            `Total ${this.props.btc.fiatCurrency}`,
+            { title: "Icon" },
+            { title: "Name" },
+            { title: "Amount" },
+            { title: "Total BTC" },
+            { title: `Total ${this.props.btc.fiatCurrency}` },
+            { title: "" },
           ]}
           body={this.getBody}
         ></Table>
@@ -118,6 +130,7 @@ const mapStateToProps = (state) => ({ btc: state.btc, market: state.market })
 
 const mapDispatchToProps = {
   removeCoin,
+  editCoinAmount,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoinsList)

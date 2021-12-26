@@ -29,16 +29,15 @@ const Wallet = (props) => {
     setAddCoin,
   }
   return (
-    <Container
-      title={props.name}
-      cardClassName="p-0"
-      titleClassName={classnames({ "d-none": renameMode | addCoin })}
-      headerChildren={<Header {...props} {...states} />}
-    >
-      <CoinsList
-        coins={props.coins}
-        walletId={props.id}
-      />
+    <Container>
+      <Section
+        title={props.name}
+        cardClassName="p-0 overflow-x-scroll"
+        titleClassName={classnames({ "d-none": renameMode | addCoin })}
+        headerChildren={<Header {...props} {...states} />}
+      >
+        <CoinsList coins={props.coins} walletId={props.id} />
+      </Section>
     </Container>
   )
 }
@@ -56,7 +55,7 @@ const Header = ({
   const [inputName, setInputName] = useState(name)
   const inputRef = useRef()
   return (
-    <div className="d-flex flex-grow-1 justify-content-between mb-2 pl-1">
+    <div className="d-flex flex-grow-1 justify-content-between mb-2">
       {addCoin && <AddCoin walletId={id} setAddCoin={setAddCoin} />}
       <div className="d-flex">
         {renameMode ? (
@@ -69,7 +68,7 @@ const Header = ({
             />
             <Icon
               name="done"
-              className="text-success px-2"
+              className="success px-2"
               onClick={() => {
                 renameWallet({ name: inputName, id })
                 setRenameMode(false)
@@ -78,7 +77,7 @@ const Header = ({
             />
             <Icon
               name="close"
-              className="text-danger px-2"
+              className="danger px-2"
               onClick={() => {
                 setRenameMode(false)
                 setInputName(name)
@@ -88,7 +87,7 @@ const Header = ({
         ) : (
           <Icon
             name="edit"
-            className={classnames("text-secondary", {
+            className={classnames("ml-1", {
               "d-none": addCoin | renameMode,
             })}
             onClick={() => {
@@ -98,28 +97,21 @@ const Header = ({
           />
         )}
       </div>
-      <div
-        className={classnames({
-          "d-flex": !addCoin && !renameMode,
-          "d-none": addCoin | renameMode,
-        })}
-        role="button"
-        onClick={() => setAddCoin(true)}
-      >
-        <Icon name="monetization_on" className="text-primary" />
-        <Icon name="add" className="text-primary" />
-      </div>
+      {!renameMode && !addCoin && (
+        <CoinAddButton role="button" onClick={() => setAddCoin(true)}>
+          <Icon name="add" />
+          <Icon name="monetization_on" />
+        </CoinAddButton>
+      )}
       {renameMode && (
-        <div className={classnames({})}>
-          <Icon
-            name="delete"
-            className="text-secondary"
-            onClick={() => {
-              deleteWallet({ id })
-              setRenameMode(false)
-            }}
-          />
-        </div>
+        <Icon
+          name="delete"
+          className="danger"
+          onClick={() => {
+            deleteWallet({ id })
+            setRenameMode(false)
+          }}
+        />
       )}
     </div>
   )
@@ -131,8 +123,24 @@ const mapDispatchToProps = { renameWallet, deleteWallet }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallets)
 
-const Container = styled(Section)`
+const Container = styled.div`
+  .overflow-x-scroll {
+    overflow-x: scroll;
+    max-width: 100vw;
+  }
+
   .hideTitle {
     display: none;
+  }
+`
+const CoinAddButton = styled.div`
+  white-space: nowrap;
+  > * {
+    display: inline;
+  }
+  :hover {
+    > * {
+      color: var(--primary);
+    }
   }
 `
