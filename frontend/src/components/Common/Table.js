@@ -8,8 +8,13 @@ const Table = ({ header, body }) => {
       {header && (
         <thead>
           <tr className="TableHeader FS3x Uppercase" style={{ paddingTop: 24 }}>
-            {header.map((name, index) => (
-              <th key={`table-header-${index}`}>{name}</th>
+            {header.map((column, index) => (
+              <th
+                key={`table-header-${index}`}
+                style={{ minWidth: column.width || "auto" }}
+              >
+                {column.title}
+              </th>
             ))}
           </tr>
         </thead>
@@ -28,14 +33,15 @@ const Table = ({ header, body }) => {
 }
 
 const Column = ({ data }) => {
-  if (!data?.children) return <td className="FS2x py-1 PR24">{data}</td>
+  if (!data?.children) return <td className="FS2x py-1 pr-2">{data}</td>
   const { className, ...props } = data
-  return <td className={classNames("FS2x py-1 PR24", className)} {...props} />
+  return <td className={classNames("FS2x py-1 pr-2", className)} {...props} />
 }
 
 const Container = styled.table`
   width: 100%;
   border-spacing: 0;
+  white-space: nowrap;
   tr {
     td:first-child,
     th:first-child {
@@ -68,7 +74,6 @@ const Container = styled.table`
     th {
       position: sticky;
       top: 0;
-      z-index: 5;
       background: #fff;
     }
   }

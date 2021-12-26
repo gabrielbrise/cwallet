@@ -8,10 +8,10 @@ const Section = ({
   titleClassName,
   cardClassName,
   cardStyle,
-  sectionClassName,
+  className,
   children,
 }) => (
-  <div className={cx("mb-4", sectionClassName)}>
+  <div className={cx("mb-4", className)}>
     <div className={cx("d-flex", headerClassName)}>
       <h2 className={cx("h4 text-secondary OpenSans", titleClassName)}>
         {title}

@@ -23,8 +23,8 @@ class AddCoin extends Component {
   }
   render() {
     return (
-      <Container className="form-inline mt-4" onSubmit={this.addCoin}>
-        <CoinSymbolInput />
+      <Container className="form-inline w-100" onSubmit={this.addCoin}>
+        <CoinSymbolInput name="coin" />
         <input
           className="form-control mr-2"
           name="amount"
@@ -36,7 +36,7 @@ class AddCoin extends Component {
         <button className="btn btn-primary" type="submit">
           ADD
         </button>
-        <button className="btn btn-danger ml-2" onClick={this.cancel}>
+        <button className="btn btn-light ml-2" onClick={this.cancel}>
           cancel
         </button>
       </Container>
@@ -55,10 +55,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(AddCoin)
 const Container = styled.form`
   display: flex;
   max-width: 90vw;
-  > * {
-    max-width: 45%;
-  }
-  > :last-child {
-    max-width: 10%;
-  }
 `
