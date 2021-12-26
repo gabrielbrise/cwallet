@@ -1,5 +1,6 @@
 body {
   font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
 }
 .OpenSans {
   font-family: "Open Sans", sans-serif;
@@ -13,8 +14,26 @@ body {
   overflow-y: hidden;
 }
 
+.btn-primary {
+  background-color: var(--primary) !important;
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--white) !important;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
 .bg-primary {
   background-color: var(--primary) !important;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 800px;
+  }
 }
 
 :root {
