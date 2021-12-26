@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import { addWallet } from "ducks/Wallets"
 import Icon from "components/Common/Icon"
 
-const AddWallet = ({ wallets, addWallet, extended }) => {
+const AddWallet = ({ wallets, addWallet }) => {
   const onClick = (e) => {
     addWallet({ name: `Wallet ${wallets.length}` })
   }
@@ -12,7 +12,7 @@ const AddWallet = ({ wallets, addWallet, extended }) => {
   return (
     <Container className="d-flex" onClick={onClick}>
       <Icon name="add" outlined className="mx-1" />
-      {extended && <h2 className="h6 pr-2 m-0">ADD WALLET</h2>}
+      <h2 className="h6 pr-2 m-0">ADD WALLET</h2>
     </Container>
   )
 }

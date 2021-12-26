@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { loadWallets } from "ducks/Wallets"
 import Icon from "components/Common/Icon"
 
-const LoadWallets = ({ loadWallets, extended }) => {
+const LoadWallets = ({ loadWallets }) => {
   const uploadWalletsFile = () => {
     const upload = document.getElementById("fileUpload")
     upload.click()
@@ -39,7 +39,7 @@ const LoadWallets = ({ loadWallets, extended }) => {
         onChange={handleWalletsFile}
       />
       <Icon name="upload" className="mx-1" />
-      {extended && <h2 className="h6 pr-2 m-0">LOAD WALLETS</h2>}
+      <h2 className="h6 pr-2 m-0">LOAD WALLETS</h2>
     </Container>
   )
 }
