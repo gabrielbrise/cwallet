@@ -24,4 +24,5 @@ const Container = styled.header`
   left: 0;
   height: 32px;
   background-color: #f7931a;
+  box-shadow: 0 4px 8px -8px #333;
 `
