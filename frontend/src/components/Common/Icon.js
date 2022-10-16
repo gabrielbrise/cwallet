@@ -13,7 +13,11 @@ const Icon = ({ name, outlined = false, className, onClick, children }) => {
   const style = outlined ? styleType.outlined : styleType.filled
   return (
     <Container
-      className={classnames({ pointer: onClick }, className)}
+      className={classnames(
+        { pointer: onClick },
+        className,
+        "flex-inline-center"
+      )}
       onClick={onClick}
     >
       {children}
@@ -25,9 +29,11 @@ const Icon = ({ name, outlined = false, className, onClick, children }) => {
 export default Icon
 
 const Container = styled.span`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  &.flex-inline-center {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
   &.pointer {
     cursor: pointer;
     color: #ccc;
