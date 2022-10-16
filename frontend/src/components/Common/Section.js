@@ -18,9 +18,11 @@ const Section = ({
       </h2>
       {headerChildren}
     </div>
-    <div className={cx("card card-body", cardClassName)} style={cardStyle}>
-      {children}
-    </div>
+    {children && (
+      <div className={cx("card card-body", cardClassName)} style={cardStyle}>
+        {children}
+      </div>
+    )}
   </div>
 )
 export default Section

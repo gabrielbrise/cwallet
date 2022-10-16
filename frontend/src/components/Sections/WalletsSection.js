@@ -8,6 +8,7 @@ import Icon from "components/Common/Icon"
 import classnames from "classnames"
 import Input from "components/Common/Input"
 import { renameWallet, deleteWallet } from "ducks/Wallets"
+import AddCoinButton from "components/Wallets/AddCoinButton"
 
 const Wallets = ({ wallets, renameWallet, deleteWallet }) =>
   wallets.map((wallet) => (
@@ -28,15 +29,20 @@ const Wallet = (props) => {
     addCoin,
     setAddCoin,
   }
+  const hasCoins = props.coins && props.coins.length
   return (
     <Container>
       <Section
         title={props.name}
-        cardClassName="p-0 overflow-x-scroll"
+        cardClassName={classnames({ "p-0": hasCoins }, "overflow-x-scroll")}
         titleClassName={classnames({ "d-none": renameMode | addCoin })}
-        headerChildren={<Header {...props} {...states} />}
+        headerChildren={<Header {...props} {...states} hasCoins={hasCoins} />}
       >
-        <CoinsList coins={props.coins} walletId={props.id} />
+        {hasCoins ? (
+          <CoinsList coins={props.coins} walletId={props.id} />
+        ) : (
+          "Wallet is empty. Add a coin so you can start building your portfolio."
+        )}
       </Section>
     </Container>
   )
@@ -51,6 +57,7 @@ const Header = ({
   setAddCoin,
   renameWallet,
   deleteWallet,
+  hasCoins,
 }) => {
   const [inputName, setInputName] = useState(name)
   const inputRef = useRef()
@@ -98,10 +105,7 @@ const Header = ({
         )}
       </div>
       {!renameMode && !addCoin && (
-        <CoinAddButton role="button" onClick={() => setAddCoin(true)}>
-          <Icon name="add" />
-          <Icon name="monetization_on" />
-        </CoinAddButton>
+        <AddCoinButton onClick={() => setAddCoin(true)} expanded={!hasCoins} />
       )}
       {renameMode && (
         <Icon
@@ -131,16 +135,5 @@ const Container = styled.div`
 
   .hideTitle {
     display: none;
-  }
-`
-const CoinAddButton = styled.div`
-  white-space: nowrap;
-  > * {
-    display: inline;
-  }
-  :hover {
-    > * {
-      color: var(--primary);
-    }
   }
 `
