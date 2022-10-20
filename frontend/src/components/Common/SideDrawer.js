@@ -50,7 +50,7 @@ const SideDrawer = ({ show, setShow }) => {
       <Container className={cx({ show })} style={{ top: window.scrollY }}>
         <SaveWallets />
         <LoadWallets />
-        <AddWallet />
+        <AddWallet setShowSideDrawer={setShow} />
         <SelectFiatCurrency />
       </Container>
     </Modal>

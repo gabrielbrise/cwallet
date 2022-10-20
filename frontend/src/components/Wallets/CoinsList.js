@@ -45,11 +45,16 @@ class CoinsList extends Component {
             <input
               defaultValue={coin.amount}
               style={{ height: 24 }}
-              onChange={(e) =>
+              onLoad={(e) =>
                 this.setState({
                   currentCoinAmount: parseInt(e.currentTarget.value),
                 })
               }
+              onChange={(e) => {
+                this.setState({
+                  currentCoinAmount: parseInt(e.currentTarget.value),
+                })
+              }}
             />
           ) : (
             coin.amount
@@ -91,6 +96,13 @@ class CoinsList extends Component {
 
   enterEditCoin = (row) => {
     this.setState({ editCoin: row })
+    console.log(
+      this.props.market.coins,
+      this.props.market.coins.find((c) => c.id === row)
+    )
+    this.setState({
+      currentCoinAmount: this.props.market.coins.find((c) => c.id === row),
+    })
   }
 
   cancelEditCoin = () => {

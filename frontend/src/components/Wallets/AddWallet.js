@@ -4,9 +4,19 @@ import { connect } from "react-redux"
 import { addWallet } from "ducks/Wallets"
 import Icon from "components/Common/Icon"
 
-const AddWallet = ({ wallets, addWallet }) => {
+const AddWallet = ({ wallets, addWallet, setShowSideDrawer }) => {
   const onClick = (e) => {
     addWallet({ name: `Wallet ${wallets.length}` })
+    setShowSideDrawer(false)
+    setTimeout(
+      () =>
+        window.scrollTo({
+          left: 0,
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        }),
+      200
+    )
   }
 
   return (
