@@ -128,9 +128,11 @@ const mapDispatchToProps = { renameWallet, deleteWallet }
 export default connect(mapStateToProps, mapDispatchToProps)(Wallets)
 
 const Container = styled.div`
-  .overflow-x-scroll {
-    overflow-x: scroll;
-    max-width: 100vw;
+  @media(max-width: 1336px) {
+    .overflow-x-scroll {
+      overflow-x: scroll;
+      max-width: 100vw;
+    }
   }
 
   .hideTitle {
