@@ -110,7 +110,7 @@ class CoinsList extends Component {
   }
 
   saveEditCoin = (walletId, index, amount) => {
-    this.props.editCoinAmount(walletId, index, amount)
+    if (amount) this.props.editCoinAmount(walletId, index, amount)
     this.cancelEditCoin()
   }
 
