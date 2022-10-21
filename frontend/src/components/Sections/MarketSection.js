@@ -1,22 +1,29 @@
-import React, { useEffect, useState } from "react"
+import React, { useRef } from "react"
 import { connect } from "react-redux"
 import Section from "components/Common/Section"
 import UpdateMarketButton from "components/Market/UpdateMarketButton"
 
 const MarketSection = ({ btc, coins }) => {
+  const isMarketEmpty = coins.length === 0 || (coins.length === 1 && coins[0].id === 1)
+  const ref = useRef()
+  const elementRef = ref.current
+  const isOverflowing = () => elementRef && (elementRef.scrollWidth > elementRef.offsetWidth)
   return (
-    <Section
-      title="Current Market"
-      headerChildren={<UpdateMarketButton />}
-      headerClassName="justify-content-between"
-      cardStyle={{ overflowX: "scroll" }}
-    >
-      {coins.length === 0 || (coins.length === 1 && coins[0].id === 1) ? (
-        "Add altcoins to your wallets to see market information about them"
-      ) : (
-        <MarketInfo btc={btc} coins={coins} />
-      )}
-    </Section>
+    <div ref={ref}>
+      <Section
+        title="Current Market"
+        headerChildren={<UpdateMarketButton />}
+        headerClassName="justify-content-between"
+        cardStyle={{ overflowX: isMarketEmpty || !isOverflowing() ? "inherit" : "scroll" }}
+      >
+        {isMarketEmpty ? (
+          "Add altcoins to your wallets to see market information about them"
+        ) : (
+          <MarketInfo btc={btc} coins={coins} />
+        )}
+      </Section>
+    </div>
+
   )
 }
 
