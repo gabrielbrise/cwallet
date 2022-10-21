@@ -34,6 +34,7 @@ const Container = styled.span`
     justify-content: center;
     align-items: center;
   }
+  user-select: none;
   &.pointer {
     cursor: pointer;
     color: #ccc;
