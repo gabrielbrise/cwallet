@@ -8,7 +8,8 @@ const MarketSection = ({ btc, coins }) => {
     <Section
       title="Current Market"
       headerChildren={<UpdateMarketButton />}
-      cardStyle={{ overflow: "scroll" }}
+      headerClassName="justify-content-between"
+      cardStyle={{ overflowX: "scroll" }}
     >
       {coins.length === 0 || (coins.length === 1 && coins[0].id === 1) ? (
         "Add altcoins to your wallets to see market information about them"
@@ -37,9 +38,9 @@ const MarketInfo = ({ btc, coins }) => {
               width={24}
             />
             <div className="OpenSans">{`${coin.name}`}</div>
-            <div className="OpenSans font-weight-bold">{`${
-              fiatCurrencySign[btc.fiatCurrency]
-            } ${fiatCurrentValue}`}</div>
+            <div className="OpenSans font-weight-bold">
+              {`${fiatCurrencySign[btc.fiatCurrency]} ${fiatCurrentValue}`}
+            </div>
             <div className="OpenSans">{`${coin.value}`}</div>
           </Card>
         )
