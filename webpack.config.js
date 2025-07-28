@@ -9,23 +9,25 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/env", "@babel/preset-react"],
-          plugins: [
-            ["@babel/plugin-proposal-class-properties"],
-            [
-              "module-resolver",
-              {
-                root: ["./frontend/src"],
-                alias: {
-                  "components*": "./components/*",
-                  "ducks*": "./ducks/*",
-                  "helpers*": "./helpers/*",
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/env", "@babel/preset-react"],
+            plugins: [
+              ["@babel/plugin-proposal-class-properties"],
+              [
+                "module-resolver",
+                {
+                  root: ["./frontend/src"],
+                  alias: {
+                    "components*": "./components/*",
+                    "ducks*": "./ducks/*",
+                    "helpers*": "./helpers/*",
+                  },
                 },
-              },
+              ],
             ],
-          ],
+          },
         },
       },
       {
@@ -38,18 +40,23 @@ module.exports = {
       },
     ],
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
   output: {
     path: path.resolve(__dirname, "./frontend/dist/"),
     publicPath: "/",
     filename: "bundle.js",
+    clean: true, // Cleans output dir before emit (webpack 5+)
   },
   devtool: "inline-source-map",
   devServer: {
-    contentBase: path.join(__dirname, "./frontend/public/"),
+    static: {
+      directory: path.join(__dirname, "./frontend/public/"),
+    },
     port: 3000,
-    publicPath: "/",
-    hotOnly: true,
+    hot: true,
+    historyApiFallback: true, // For React Router
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
 }
